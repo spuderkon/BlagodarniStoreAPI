@@ -15,7 +15,7 @@ public partial class MeatStoreContext : DbContext
     {
     }
 
-    public virtual DbSet<Address> Addresses { get; set; }
+    public virtual DbSet<Addresses> Addresses { get; set; }
 
     public virtual DbSet<Cart> Carts { get; set; }
 
@@ -42,9 +42,9 @@ public partial class MeatStoreContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Address>(entity =>
+        modelBuilder.Entity<Addresses>(entity =>
         {
-            entity.Property(e => e.Address1)
+            entity.Property(e => e.Address)
                 .HasMaxLength(50)
                 .HasColumnName("Address");
 
