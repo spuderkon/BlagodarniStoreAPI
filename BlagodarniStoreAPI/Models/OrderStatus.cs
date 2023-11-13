@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BlagodarniStoreAPI.Models;
 
-public partial class Status
+public partial class OrderStatus
 {
     public int Id { get; set; }
 

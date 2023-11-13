@@ -15,45 +15,34 @@ public partial class MeatStoreContext : DbContext
     {
     }
 
-    public virtual DbSet<Addresses> Addresses { get; set; }
-
     public virtual DbSet<Cart> Carts { get; set; }
 
     public virtual DbSet<Category> Categories { get; set; }
+
+    public virtual DbSet<CustomerAddress> CustomerAddresses { get; set; }
 
     public virtual DbSet<Delivery> Deliveries { get; set; }
 
     public virtual DbSet<Order> Orders { get; set; }
 
-    public virtual DbSet<Payment> Payments { get; set; }
+    public virtual DbSet<OrderStatus> OrderStatuses { get; set; }
+
+    public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
 
     public virtual DbSet<Role> Roles { get; set; }
-
-    public virtual DbSet<Status> Statuses { get; set; }
 
     public virtual DbSet<Unit> Units { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Name=MeatStore");
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=DESKTOP-NIOVPU7;Database=MeatStore;Integrated Security = true;TrustServerCertificate=true;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Addresses>(entity =>
-        {
-            entity.Property(e => e.Address)
-                .HasMaxLength(50)
-                .HasColumnName("Address");
-
-            entity.HasOne(d => d.Customer).WithMany(p => p.Addresses)
-                .HasForeignKey(d => d.CustomerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Addresses_User");
-        });
-
         modelBuilder.Entity<Cart>(entity =>
         {
             entity
@@ -84,6 +73,20 @@ public partial class MeatStoreContext : DbContext
             entity.HasOne(d => d.Parent).WithMany(p => p.InverseParent)
                 .HasForeignKey(d => d.ParentId)
                 .HasConstraintName("FK_Category_Category");
+        });
+
+        modelBuilder.Entity<CustomerAddress>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_Addresses");
+
+            entity.ToTable("CustomerAddress");
+
+            entity.Property(e => e.Address).HasMaxLength(50);
+
+            entity.HasOne(d => d.Customer).WithMany(p => p.CustomerAddresses)
+                .HasForeignKey(d => d.CustomerId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Addresses_User");
         });
 
         modelBuilder.Entity<Delivery>(entity =>
@@ -123,9 +126,20 @@ public partial class MeatStoreContext : DbContext
                 .HasConstraintName("FK_Order_Status");
         });
 
-        modelBuilder.Entity<Payment>(entity =>
+        modelBuilder.Entity<OrderStatus>(entity =>
         {
-            entity.ToTable("Payment");
+            entity.HasKey(e => e.Id).HasName("PK_Status");
+
+            entity.ToTable("OrderStatus");
+
+            entity.Property(e => e.Name).HasMaxLength(30);
+        });
+
+        modelBuilder.Entity<PaymentMethod>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_Payment");
+
+            entity.ToTable("PaymentMethod");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Name).HasMaxLength(15);
@@ -135,7 +149,6 @@ public partial class MeatStoreContext : DbContext
         {
             entity.ToTable("Product");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Description).HasMaxLength(300);
             entity.Property(e => e.Image).HasMaxLength(20);
             entity.Property(e => e.Name).HasMaxLength(50);
@@ -161,18 +174,11 @@ public partial class MeatStoreContext : DbContext
             entity.Property(e => e.Name).HasMaxLength(15);
         });
 
-        modelBuilder.Entity<Status>(entity =>
-        {
-            entity.ToTable("Status");
-
-            entity.Property(e => e.Name).HasMaxLength(30);
-        });
-
         modelBuilder.Entity<Unit>(entity =>
         {
             entity.ToTable("Unit");
 
-            entity.Property(e => e.Name).HasMaxLength(15);
+            entity.Property(e => e.Name).HasMaxLength(50);
         });
 
         modelBuilder.Entity<User>(entity =>

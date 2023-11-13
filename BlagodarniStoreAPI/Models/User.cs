@@ -25,7 +25,7 @@ public partial class User
 
     public string Address { get; set; } = null!;
 
-    public virtual ICollection<Addresses> Addresses { get; set; } = new List<Addresses>();
+    public virtual ICollection<CustomerAddress> CustomerAddresses { get; set; } = new List<CustomerAddress>();
 
     public virtual ICollection<Delivery> Deliveries { get; set; } = new List<Delivery>();
 

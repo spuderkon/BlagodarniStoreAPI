@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BlagodarniStoreAPI.Models;
 
-public partial class Payment
+public partial class PaymentMethod
 {
     public int Id { get; set; }
 

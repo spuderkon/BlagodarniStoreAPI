@@ -21,7 +21,7 @@ public partial class Order
 
     public virtual Delivery? Delivery { get; set; }
 
-    public virtual Payment Payment { get; set; } = null!;
+    public virtual PaymentMethod Payment { get; set; } = null!;
 
-    public virtual Status Status { get; set; } = null!;
+    public virtual OrderStatus Status { get; set; } = null!;
 }
