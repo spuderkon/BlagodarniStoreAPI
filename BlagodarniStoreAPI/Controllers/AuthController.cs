@@ -68,7 +68,7 @@ namespace BlagodarniStoreAPI.Controllers
             try
             {
                 User newUser = _IAuthRepository.Register(user)!;
-                return Ok(newUser);
+                return Ok(new UserDTO(newUser));
             }
             catch (Exception ex)
             {
