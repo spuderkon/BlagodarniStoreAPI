@@ -17,21 +17,20 @@ namespace BlagodarniStoreAPI.Repositories
 
         #region GET
 
-        public List<Product>? GetProductsByParentId(int CategoryId)
+        public List<Product>? GetProductsByParent(int CategoryId)
         {
-            var products = _context.Products.Where(x => x.Category.ParentId == CategoryId).Include(x=> x.Unit).ToList();
-            return products;
+            var products = _context.Products.Where(x => x.Category.ParentId == CategoryId).Include(x=> x.Unit);
+            return LoadData(products).ToList();
         }
-        /*private IQueryable<Product> LoadData(IQueryable<Product> products)
+        private IQueryable<Product> LoadData(IQueryable<Product> products)
         {
             return products
                   .Select(x => new ProductDTO(x)
                   {
-                      Post = x.Post != null ? new PostDTO(x.Post) : null,
-                      Role = new RoleDTO(x.Role),
-                      Department = x.Department != null ? new DepartmentDTO(x.Department) : null
+                      Unit = new UnitDTO(x.Unit),
+                      Category = new CategoryDTO(x.Category)
                   });
-        }*/
+        }
 
         #endregion
     }

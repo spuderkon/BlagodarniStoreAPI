@@ -4,6 +4,6 @@ namespace BlagodarniStoreAPI.Interfaces
 {
     public interface IProductRepository
     {
-        List<Product> GetProductsByParentId(int CategoryId);
+        List<Product> GetProductsByParent(int CategoryId);
     }
 }

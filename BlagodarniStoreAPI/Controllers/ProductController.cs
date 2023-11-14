@@ -21,10 +21,10 @@ namespace BlagodarniStoreAPI.Controllers
         }
 
 
-        [HttpGet("GetProductsByParentId/{Id}")]
-        public ActionResult<IEnumerable<Product>> GetProductsByParentId(int Id)
+        [HttpGet("GetProductsByParent/{Id}")]
+        public ActionResult<IEnumerable<Product>> GetProductsByParent(int Id)
         {
-            var Products = _ProductRepository.GetProductsByParentId(Id);
+            var Products = _ProductRepository.GetProductsByParent(Id);
             return Products == null ? NotFound() : Products;
         }
     }

@@ -37,6 +37,7 @@ string connection = builder.Configuration.GetConnectionString("MeatStore");
 builder.Services.AddDbContext<MeatStoreContext>(options => options.UseSqlServer(connection));
 builder.Services.AddTransient<IAuthRepository, AuthRepository>();
 builder.Services.AddTransient<IProductRepository, ProductRepository>();
+builder.Services.AddTransient<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 
@@ -47,6 +48,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors(opt => { opt.AllowAnyHeader(); opt.AllowAnyOrigin(); opt.AllowAnyMethod(); });
 app.UseHttpsRedirection();
 
 app.UseAuthentication();

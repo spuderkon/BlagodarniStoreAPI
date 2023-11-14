@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using BlagodarniStoreAPI.Models;
 using BlagodarniStoreAPI.Tools;
+using BlagodarniStoreAPI.ModelsDTO;
+using BCrypt.Net;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlagodarniStoreAPI.Controllers
 {
@@ -13,19 +16,28 @@ namespace BlagodarniStoreAPI.Controllers
     public class AuthController : Controller
     {
         private readonly IAuthRepository _IAuthRepository;
-        private readonly IConfiguration _Configuration;
+        private readonly IConfiguration _IConfiguration;
+        private IUserRepository _IUserRepository;
 
-        public AuthController(IAuthRepository iAuthRepository, IConfiguration configuration)
+
+        public AuthController(IAuthRepository iAuthRepository, IConfiguration iConfiguration, IUserRepository iUserRepository)
         {
             _IAuthRepository = iAuthRepository;
-            _Configuration = configuration;
+            _IConfiguration = iConfiguration;
+            _IUserRepository = iUserRepository;
         }
+
+        #region GET
 
         [HttpGet("IsAuth"), Authorize]
         public IActionResult IsAuth()
         {
             return Ok();
         }
+
+        #endregion
+
+        #region POST
 
         [HttpPost("Authorize")]
         public IActionResult Authorize(string email, string password)
@@ -40,7 +52,7 @@ namespace BlagodarniStoreAPI.Controllers
                     new Claim(ClaimTypes.Role, user.Role.Name),
                     new Claim("Id",user.Id.ToString())
                 });
-                    return Ok(new { Token = JwtTools.GenerateJwtToken(identity, _Configuration["JwtSettings:Key"], _Configuration["JwtSettings:Issuer"], _Configuration["JwtSettings:Audience"]) });
+                    return Ok(new { Token = JwtTools.GenerateJwtToken(identity, _IConfiguration["JwtSettings:Key"]!, _IConfiguration["JwtSettings:Issuer"]!, _IConfiguration["JwtSettings:Audience"]!) });
                 }
                 return Unauthorized();
             }
@@ -49,5 +61,34 @@ namespace BlagodarniStoreAPI.Controllers
                 return BadRequest(ErrorTools.GetInfo(ex));
             }
         }
+
+        [HttpPost("Register")]
+        public IActionResult Register([FromBody] User user)
+        {
+            try
+            {
+                User newUser = _IAuthRepository.Register(user)!;
+                return Ok(newUser);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ErrorTools.GetInfo(ex));
+            }
+        }
+
+        #endregion
+
+        #region PUT
+
+
+
+        #endregion
+
+        #region DELETE
+
+
+
+        #endregion
+
     }
 }
