@@ -21,7 +21,7 @@ namespace BlagodarniStoreAPI.Controllers
 
         #region GET
 
-        [HttpPost("Get/{id}")]
+        [HttpGet("Get/{id}")]
         public ActionResult<User> Get(int id)
         {
             User user = _IUserRepository.Get(id)!;

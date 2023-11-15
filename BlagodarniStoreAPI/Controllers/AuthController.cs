@@ -29,30 +29,31 @@ namespace BlagodarniStoreAPI.Controllers
 
         #region GET
 
-        [HttpGet("IsAuth"), Authorize]
+        /*[HttpGet("IsAuth"), Authorize]
         public IActionResult IsAuth()
         {
             return Ok();
-        }
+        }*/
 
         #endregion
 
         #region POST
 
         [HttpPost("Authorize")]
-        public IActionResult Authorize(string email, string password)
+        public IActionResult Authorize(string phoneNumber, string password)
         {
             try
             {
-                User? user = _IAuthRepository.ValidUser(email, password);
+                User? user = _IAuthRepository.ValidUser(phoneNumber, password);
                 if (user is not null)
                 {
                     var identity = new ClaimsIdentity(new[] {
-                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.MobilePhone, user.PhoneNumber),
                     new Claim(ClaimTypes.Role, user.Role.Name),
                     new Claim("Id",user.Id.ToString())
                 });
-                    return Ok(new { Token = JwtTools.GenerateJwtToken(identity, _IConfiguration["JwtSettings:Key"]!, _IConfiguration["JwtSettings:Issuer"]!, _IConfiguration["JwtSettings:Audience"]!) });
+
+                return Ok(new { Token = JwtTools.GenerateJwtToken(identity, _IConfiguration["JwtSettings:Key"]!, _IConfiguration["JwtSettings:Issuer"]!, _IConfiguration["JwtSettings:Audience"]!) });
                 }
                 return Unauthorized();
             }
@@ -68,12 +69,26 @@ namespace BlagodarniStoreAPI.Controllers
             try
             {
                 User newUser = _IAuthRepository.Register(user)!;
-                return Ok(new UserDTO(newUser));
+                var identity = new ClaimsIdentity(new[] {
+                    new Claim(ClaimTypes.MobilePhone, newUser.PhoneNumber),
+                    new Claim(ClaimTypes.Role, newUser.Role!.Name),
+                    new Claim("Id",newUser.Id.ToString())
+                });
+                string Token = JwtTools.GenerateJwtToken(identity, _IConfiguration["JwtSettings:Key"]!, _IConfiguration["JwtSettings:Issuer"]!, _IConfiguration["JwtSettings:Audience"]!);
+                return Ok( Token );
             }
             catch (Exception ex)
             {
                 return BadRequest(ErrorTools.GetInfo(ex));
             }
+        }
+
+        [HttpPost("SetNewPassword")]
+        public IActionResult SetNewPassword(string phoneNumber, string password)
+        {
+            bool result = _IAuthRepository.SetNewPassword(phoneNumber, password);
+            if (result) return Ok();
+            else return BadRequest();
         }
 
         #endregion
