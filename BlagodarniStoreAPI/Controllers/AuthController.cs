@@ -67,7 +67,7 @@ namespace BlagodarniStoreAPI.Controllers
         public IActionResult Register([FromBody] User user)
         {
             try
-            {//рмоа
+            {
                 User newUser = _IAuthRepository.Register(user)!;
                 var identity = new ClaimsIdentity(new[] {
                     new Claim(ClaimTypes.MobilePhone, newUser.PhoneNumber),
