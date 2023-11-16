@@ -19,9 +19,9 @@ public partial class User
 
     public int RoleId { get; set; }
 
-    public string? Password { get; set; }
+    public string Password { get; set; } = null!;
 
-    public string? PasswordSalt { get; set; }
+    public string PasswordSalt { get; set; } = null!;
 
     public string Address { get; set; } = null!;
 
@@ -29,5 +29,5 @@ public partial class User
 
     public virtual ICollection<Delivery> Deliveries { get; set; } = new List<Delivery>();
 
-    public virtual Role? Role { get; set; }
+    public virtual Role Role { get; set; } = null!;
 }

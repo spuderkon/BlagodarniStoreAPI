@@ -13,18 +13,15 @@ namespace BlagodarniStoreAPI.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class AuthController : Controller
+    public class AuthController : ControllerBase
     {
-        private readonly IAuthRepository _IAuthRepository;
-        private readonly IConfiguration _IConfiguration;
-        private IUserRepository _IUserRepository;
+        private readonly IAuthRepository _iAuthRepository;
+        private readonly IConfiguration _iConfiguration;
 
-
-        public AuthController(IAuthRepository iAuthRepository, IConfiguration iConfiguration, IUserRepository iUserRepository)
+        public AuthController(IAuthRepository iAuthRepository, IConfiguration iConfiguration)
         {
-            _IAuthRepository = iAuthRepository;
-            _IConfiguration = iConfiguration;
-            _IUserRepository = iUserRepository;
+            _iAuthRepository = iAuthRepository;
+            _iConfiguration = iConfiguration;
         }
 
         #region GET
@@ -44,7 +41,7 @@ namespace BlagodarniStoreAPI.Controllers
         {
             try
             {
-                User? user = _IAuthRepository.ValidUser(phoneNumber, password);
+                User? user = _iAuthRepository.ValidUser(phoneNumber, password);
                 if (user is not null)
                 {
                     var identity = new ClaimsIdentity(new[] {
@@ -52,8 +49,8 @@ namespace BlagodarniStoreAPI.Controllers
                     new Claim(ClaimTypes.Role, user.Role.Name),
                     new Claim("Id",user.Id.ToString())
                 });
-
-                return Ok(new { Token = JwtTools.GenerateJwtToken(identity, _IConfiguration["JwtSettings:Key"]!, _IConfiguration["JwtSettings:Issuer"]!, _IConfiguration["JwtSettings:Audience"]!) });
+                    string Token = JwtTools.GenerateJwtToken(identity, _iConfiguration["JwtSettings:Key"]!, _iConfiguration["JwtSettings:Issuer"]!, _iConfiguration["JwtSettings:Audience"]!);
+                return Ok(Token);
                 }
                 return Unauthorized();
             }
@@ -68,13 +65,13 @@ namespace BlagodarniStoreAPI.Controllers
         {
             try
             {
-                User newUser = _IAuthRepository.Register(user)!;
+                User newUser = _iAuthRepository.Register(user)!;
                 var identity = new ClaimsIdentity(new[] {
                     new Claim(ClaimTypes.MobilePhone, newUser.PhoneNumber),
                     new Claim(ClaimTypes.Role, newUser.Role!.Name),
                     new Claim("Id",newUser.Id.ToString())
                 });
-                string Token = JwtTools.GenerateJwtToken(identity, _IConfiguration["JwtSettings:Key"]!, _IConfiguration["JwtSettings:Issuer"]!, _IConfiguration["JwtSettings:Audience"]!);
+                string Token = JwtTools.GenerateJwtToken(identity, _iConfiguration["JwtSettings:Key"]!, _iConfiguration["JwtSettings:Issuer"]!, _iConfiguration["JwtSettings:Audience"]!);
                 return Ok( Token );
             }
             catch (Exception ex)
@@ -86,7 +83,7 @@ namespace BlagodarniStoreAPI.Controllers
         [HttpPost("SetNewPassword")]
         public IActionResult SetNewPassword(string phoneNumber, string password)
         {
-            bool result = _IAuthRepository.SetNewPassword(phoneNumber, password);
+            bool result = _iAuthRepository.SetNewPassword(phoneNumber, password);
             if (result) return Ok();
             else return BadRequest();
         }

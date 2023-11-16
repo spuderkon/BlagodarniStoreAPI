@@ -13,19 +13,21 @@ namespace BlagodarniStoreAPI.Controllers
     public class ProductController : ControllerBase
     {
 
-        IProductRepository _ProductRepository;
+        IProductRepository _iProductRepository;
 
         public ProductController(IProductRepository productRepository)
         {
-            _ProductRepository = productRepository;
+            _iProductRepository = productRepository;
         }
 
-
+        #region GET
         [HttpGet("GetProductsByParent/{Id}")]
         public ActionResult<IEnumerable<Product>> GetProductsByParent(int Id)
         {
-            var Products = _ProductRepository.GetProductsByParent(Id);
+            var Products = _iProductRepository.GetProductsByParent(Id);
             return Products == null ? NotFound() : Products;
         }
+
+        #endregion
     }
 }

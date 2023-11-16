@@ -4,28 +4,26 @@ using BlagodarniStoreAPI.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 
 namespace BlagodarniStoreAPI.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class CartController : ControllerBase
     {
-        IUserRepository _iUserRepository;
+        ICartRepository _iCartRepository;
 
-        public UserController(IUserRepository iUserRepository) 
+        public CartController(ICartRepository iCartRepository)
         {
-            _iUserRepository = iUserRepository;
+            _iCartRepository = iCartRepository;
         }
 
         #region GET
 
-        [HttpGet("Get/{id}")]
-        public ActionResult<User> Get(int id)
+        [HttpGet("GetMyCart"), Authorize]
+        public ActionResult<IEnumerable<Cart>> GetMyCart() 
         {
-            User user = _iUserRepository.Get(id)!;
-            return user;
+            return _iCartRepository.GetMyCart(int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
         }
 
         #endregion

@@ -6,8 +6,10 @@ namespace BlagodarniStoreAPI.Models;
 
 public partial class MeatStoreContext : DbContext
 {
+
     public MeatStoreContext()
     {
+
     }
 
     public MeatStoreContext(DbContextOptions<MeatStoreContext> options)
@@ -38,8 +40,12 @@ public partial class MeatStoreContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=DESKTOP-NIOVPU7;Database=MeatStore;Integrated Security = true;TrustServerCertificate=true;");
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseSqlServer("Name=ConnectionStrings:MeatStore");
+        }
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -49,6 +55,11 @@ public partial class MeatStoreContext : DbContext
                 .HasNoKey()
                 .ToTable("Cart");
 
+            entity.HasOne(d => d.Customer).WithMany()
+                .HasForeignKey(d => d.CustomerId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Cart_User");
+
             entity.HasOne(d => d.Order).WithMany()
                 .HasForeignKey(d => d.OrderId)
                 .HasConstraintName("FK_Cart_Order");
@@ -57,11 +68,6 @@ public partial class MeatStoreContext : DbContext
                 .HasForeignKey(d => d.ProductId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Cart_Product");
-
-            entity.HasOne(d => d.User).WithMany()
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Cart_User");
         });
 
         modelBuilder.Entity<Category>(entity =>
@@ -142,7 +148,7 @@ public partial class MeatStoreContext : DbContext
             entity.ToTable("PaymentMethod");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Name).HasMaxLength(15);
+            entity.Property(e => e.Name).HasMaxLength(30);
         });
 
         modelBuilder.Entity<Product>(entity =>
@@ -187,12 +193,12 @@ public partial class MeatStoreContext : DbContext
 
             entity.Property(e => e.Address).HasMaxLength(50);
             entity.Property(e => e.Email).HasMaxLength(60);
-            entity.Property(e => e.Lastname).HasMaxLength(20);
-            entity.Property(e => e.Name).HasMaxLength(20);
+            entity.Property(e => e.Lastname).HasMaxLength(30);
+            entity.Property(e => e.Name).HasMaxLength(30);
             entity.Property(e => e.Password).HasMaxLength(256);
             entity.Property(e => e.PasswordSalt).HasMaxLength(256);
-            entity.Property(e => e.PhoneNumber).HasMaxLength(20);
-            entity.Property(e => e.Surname).HasMaxLength(20);
+            entity.Property(e => e.PhoneNumber).HasMaxLength(11);
+            entity.Property(e => e.Surname).HasMaxLength(30);
 
             entity.HasOne(d => d.Role).WithMany(p => p.Users)
                 .HasForeignKey(d => d.RoleId)

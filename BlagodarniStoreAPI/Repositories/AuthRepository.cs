@@ -33,8 +33,13 @@ namespace BlagodarniStoreAPI.Repositories
                 return null;
         }
 
+        #region POST
         public User? Register(User user) 
         {
+            if (PhoneNumberAlreadyExist(user.PhoneNumber)) 
+            {
+                throw new Exception("Пользователь с заданным номер телефона уже существует");
+            }
             string salt = RegistrationTools.GetRandomKey(_random.Next(128, 256));
             string pass = RegistrationTools.GetPasswordSha256(user.Password, salt);
             var creatingUser = new User
@@ -51,10 +56,21 @@ namespace BlagodarniStoreAPI.Repositories
             };
             _context.Users.Add(creatingUser);
             _context.SaveChanges();
-            var newUser = _context.Users.Include(x => x.Role).FirstOrDefault(x=>x.Id == creatingUser.Id);
+            var newCustomerAddress = new CustomerAddress
+            {
+                CustomerId = creatingUser.Id,
+                Address = creatingUser.Address,
+            };
+            _context.CustomerAddresses.Add(newCustomerAddress);
+            _context.SaveChanges();
+            //_customerAddressRepository.Add(newUser.Id, newUser.Address);
+            var newUser = _context.Users.Include(x => x.Role).Where(x => x.Id == creatingUser.Id).FirstOrDefault();
             return newUser;
         }
 
+        #endregion
+
+        #region PUT
         public bool SetNewPassword(string phoneNumber, string password)
         {
             var user = _context.Users.FirstOrDefault(x => x.PhoneNumber == phoneNumber);
@@ -69,6 +85,15 @@ namespace BlagodarniStoreAPI.Repositories
             }
             else
                 return false;
+        }
+        #endregion
+
+        private bool PhoneNumberAlreadyExist(string phoneNumber)
+        {
+            var user = _context.Users.FirstOrDefault(x => x.PhoneNumber == phoneNumber);
+            if (user is null)
+                return false;
+            return true;
         }
     }
 }

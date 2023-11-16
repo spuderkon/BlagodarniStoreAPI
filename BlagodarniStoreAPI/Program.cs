@@ -38,6 +38,8 @@ builder.Services.AddDbContext<MeatStoreContext>(options => options.UseSqlServer(
 builder.Services.AddTransient<IAuthRepository, AuthRepository>();
 builder.Services.AddTransient<IProductRepository, ProductRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<ICustomerAddressRepository, CustomerAddressRepository>();
+builder.Services.AddTransient<ICartRepository, CartRepository>();
 
 var app = builder.Build();
 
