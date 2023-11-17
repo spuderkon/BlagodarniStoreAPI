@@ -19,6 +19,8 @@ public partial class Order
 
     public bool Paid { get; set; }
 
+    public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
+
     public virtual Delivery? Delivery { get; set; }
 
     public virtual PaymentMethod Payment { get; set; } = null!;

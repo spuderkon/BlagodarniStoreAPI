@@ -6,10 +6,8 @@ namespace BlagodarniStoreAPI.Models;
 
 public partial class MeatStoreContext : DbContext
 {
-
     public MeatStoreContext()
     {
-
     }
 
     public MeatStoreContext(DbContextOptions<MeatStoreContext> options)
@@ -40,31 +38,25 @@ public partial class MeatStoreContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-            optionsBuilder.UseSqlServer("Name=ConnectionStrings:MeatStore");
-        }
-    }
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=DESKTOP-NIOVPU7;Database=MeatStore;Integrated Security=true;TrustServerCertificate=true");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Cart>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("Cart");
+            entity.ToTable("Cart");
 
-            entity.HasOne(d => d.Customer).WithMany()
+            entity.HasOne(d => d.Customer).WithMany(p => p.Carts)
                 .HasForeignKey(d => d.CustomerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Cart_User");
 
-            entity.HasOne(d => d.Order).WithMany()
+            entity.HasOne(d => d.Order).WithMany(p => p.Carts)
                 .HasForeignKey(d => d.OrderId)
                 .HasConstraintName("FK_Cart_Order");
 
-            entity.HasOne(d => d.Product).WithMany()
+            entity.HasOne(d => d.Product).WithMany(p => p.Carts)
                 .HasForeignKey(d => d.ProductId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Cart_Product");

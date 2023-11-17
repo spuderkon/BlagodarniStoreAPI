@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BlagodarniStoreAPI</name>
+    </assembly>
+    <members>
+        <member name="M:BlagodarniStoreAPI.Controllers.AuthController.Authorize(System.String,System.String)">
+            <summary>
+            Авторизация
+            </summary>
+            <param name="phoneNumber">Номер телефона</param>
+            <param name="password">Пароль</param>
+            <returns></returns>
+            <response code="200">Успешное выполнение</response>
+            <response code="400">Ошибка API</response>
+        </member>
+        <member name="M:BlagodarniStoreAPI.Controllers.AuthController.Register(BlagodarniStoreAPI.Models.User)">
+             <summary>
+             Регистрация
+             </summary>
+             <remarks>
+             Пример запроса:
+                 
+                 {
+                    "Name": "Name",
+                    "Surname": "Surname",
+                    "Lastname": "Lastname",
+                    "Email": "Email@email.com",
+                    "PhoneNumber": "79999999999", MAX_LENGTH(11)
+                    "Password": "Password",
+                    "Address": "Address"
+                 }
+            
+             </remarks>
+             <param name="user">User</param>
+             <returns></returns>
+             <response code="200">Успешное выполнение</response>
+             <response code="400">Ошибка API</response>
+        </member>
+        <member name="M:BlagodarniStoreAPI.Controllers.AuthController.SetNewPassword(System.String,System.String)">
+            <summary>
+            Установка нового пароля
+            </summary>
+            <param name="phoneNumber">Номер телефона</param>
+            <param name="password">Пароль</param>
+            <returns></returns>
+            <response code="200">Успешное выполнение</response>
+            <response code="400">Ошибка API</response>
+        </member>
+        <member name="M:BlagodarniStoreAPI.Controllers.CartController.GetMy">
+            <summary>
+            Получить мою корзину (Токен обязателен)
+            </summary>
+            <returns></returns>
+            <response code="200">Успешное выполнение</response>
+            <response code="400">Ошибка API</response>
+        </member>
+        <member name="M:BlagodarniStoreAPI.Controllers.CartController.UpdateMy(System.Collections.Generic.List{BlagodarniStoreAPI.Models.Cart})">
+             <summary>
+             Обновить или записать корзину (Токен обязателен)
+             </summary>
+             <remarks>
+             Пример запроса:
+            
+                 [
+                  {
+                   "id": 1,
+                   "customerId": 1,
+                   "productId": 3,
+                   "amount": 3
+                  },
+                  {
+                   "id": 1,
+                   "customerId": 1,
+                   "productId": 3,
+                   "amount": 3
+                  },
+                  {
+                     ...
+                  }
+                 ]
+            
+             </remarks>
+             <param name="carts">Корзины</param>
+             <returns></returns>
+             <response code="200">Успешное выполнение</response>
+             <response code="400">Ошибка API</response>
+        </member>
+        <member name="M:BlagodarniStoreAPI.Controllers.CustomerAddressControler.GetCustomerAddresses(System.Int32)">
+            <summary>
+            Получить адреса покупателя
+            </summary>
+            <param name="id">Id покупателя</param>
+            <returns></returns>
+            <response code="200">Успешное выполнение</response>
+            <response code="400">Ошибка API</response>
+        </member>
+        <member name="M:BlagodarniStoreAPI.Controllers.ProductController.GetByParentId(System.Int32)">
+            <summary>
+            Получить продукты по категории родителя
+            </summary>
+            <param name="id">Id</param>
+            <returns></returns>
+            <response code="200">Успешное выполнение</response>
+            <response code="400">Ошибка API</response>
+        </member>
+        <member name="M:BlagodarniStoreAPI.Controllers.ProductController.Add(BlagodarniStoreAPI.Models.Product)">
+             <summary>
+             Создать новый продукт (Токен обязателен)
+             </summary>
+             <remarks>
+             Пример запроса:
+                 
+                 {
+                    "Name": "Name",
+                    "CategoryId": 1,
+                    "Description": "Description",
+                    "Image": "Image.jpg",
+                    "UnitId": 1,
+                    "Price": 1
+                 }
+            
+             </remarks>
+             <param name="product">Product</param>
+             <returns></returns>
+             <response code="200">Успешное выполнение</response>
+             <response code="400">Ошибка API</response>
+        </member>
+        <member name="M:BlagodarniStoreAPI.Controllers.UserController.Get(System.Int32)">
+            <summary>
+            Получить пользователя по Id
+            </summary>
+            <param name="id">Id пользователя</param>
+            <returns></returns>
+            <response code="200">Успешное выполнение</response>
+            <response code="400">Ошибка API</response>
+        </member>
+    </members>
+</doc>

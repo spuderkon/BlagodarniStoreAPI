@@ -19,7 +19,9 @@ public partial class Product
 
     public decimal Price { get; set; }
 
-    public virtual Category Category { get; set; } = null!;
+    public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
 
-    public virtual Unit Unit { get; set; } = null!;
+    public virtual Category? Category { get; set; } = null!;
+
+    public virtual Unit? Unit { get; set; } = null!;
 }

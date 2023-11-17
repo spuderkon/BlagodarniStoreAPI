@@ -20,6 +20,13 @@ namespace BlagodarniStoreAPI.Controllers
 
         #region GET
 
+        /// <summary>
+        /// Получить адреса покупателя
+        /// </summary>
+        /// <param name="id">Id покупателя</param>
+        /// <returns></returns>
+        /// <response code="200">Успешное выполнение</response>
+        /// <response code="400">Ошибка API</response>
         [HttpGet("GetCustomerAddresses/{Id}")]
         public ActionResult<IEnumerable<CustomerAddress>> GetCustomerAddresses(int id) 
         {

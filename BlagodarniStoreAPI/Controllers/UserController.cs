@@ -21,6 +21,13 @@ namespace BlagodarniStoreAPI.Controllers
 
         #region GET
 
+        /// <summary>
+        /// Получить пользователя по Id
+        /// </summary>
+        /// <param name="id">Id пользователя</param>
+        /// <returns></returns>
+        /// <response code="200">Успешное выполнение</response>
+        /// <response code="400">Ошибка API</response>
         [HttpGet("Get/{id}")]
         public ActionResult<User> Get(int id)
         {

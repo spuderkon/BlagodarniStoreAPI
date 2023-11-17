@@ -36,6 +36,14 @@ namespace BlagodarniStoreAPI.Controllers
 
         #region POST
 
+        /// <summary>
+        /// Авторизация
+        /// </summary>
+        /// <param name="phoneNumber">Номер телефона</param>
+        /// <param name="password">Пароль</param>
+        /// <returns></returns>
+        /// <response code="200">Успешное выполнение</response>
+        /// <response code="400">Ошибка API</response>
         [HttpPost("Authorize")]
         public IActionResult Authorize(string phoneNumber, string password)
         {
@@ -60,6 +68,27 @@ namespace BlagodarniStoreAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Регистрация
+        /// </summary>
+        /// <remarks>
+        /// Пример запроса:
+        ///     
+        ///     {
+        ///        "Name": "Name",
+        ///        "Surname": "Surname",
+        ///        "Lastname": "Lastname",
+        ///        "Email": "Email@email.com",
+        ///        "PhoneNumber": "79999999999",
+        ///        "Password": "Password",
+        ///        "Address": "Address"
+        ///     }
+        ///
+        /// </remarks>
+        /// <param name="user">User</param>
+        /// <returns></returns>
+        /// <response code="200">Успешное выполнение</response>
+        /// <response code="400">Ошибка API</response>
         [HttpPost("Register")]
         public IActionResult Register([FromBody] User user)
         {
@@ -80,6 +109,14 @@ namespace BlagodarniStoreAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Установка нового пароля
+        /// </summary>
+        /// <param name="phoneNumber">Номер телефона</param>
+        /// <param name="password">Пароль</param>
+        /// <returns></returns>
+        /// <response code="200">Успешное выполнение</response>
+        /// <response code="400">Ошибка API</response>
         [HttpPost("SetNewPassword")]
         public IActionResult SetNewPassword(string phoneNumber, string password)
         {

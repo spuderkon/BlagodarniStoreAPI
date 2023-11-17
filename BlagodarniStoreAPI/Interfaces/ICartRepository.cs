@@ -4,6 +4,7 @@ namespace BlagodarniStoreAPI.Interfaces
 {
     public interface ICartRepository
     {
-        List<Cart> GetMyCart(int customerId);
+        List<Cart> GetMy(int customerId);
+        void UpdateMy(int customerId, List<Cart> carts);
     }
 }

@@ -17,7 +17,7 @@ namespace BlagodarniStoreAPI.Repositories
 
         #region GET
 
-        public List<Product>? GetProductsByParent(int CategoryId)
+        public List<Product>? GetByParentId(int CategoryId)
         {
             var products = _context.Products.Where(x => x.Category.ParentId == CategoryId).Include(x=> x.Unit);
             return LoadData(products).ToList();
@@ -30,6 +30,17 @@ namespace BlagodarniStoreAPI.Repositories
                       Unit = new UnitDTO(x.Unit),
                       Category = new CategoryDTO(x.Category)
                   });
+        }
+
+        #endregion
+
+        #region ADD
+
+        public Product Add(Product product)
+        {
+            _context.Products.Add(product);
+            _context.SaveChanges();
+            return product;
         }
 
         #endregion
