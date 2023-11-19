@@ -106,7 +106,7 @@
         </member>
         <member name="M:BlagodarniStoreAPI.Controllers.ProductController.Add(BlagodarniStoreAPI.Models.Product)">
              <summary>
-             Создать новый продукт (Токен обязателен)
+             Создать новый продукт (Токен обязателен, Админ)
              </summary>
              <remarks>
              Пример запроса:
@@ -125,6 +125,14 @@
              <returns></returns>
              <response code="200">Успешное выполнение</response>
              <response code="400">Ошибка API</response>
+        </member>
+        <member name="M:BlagodarniStoreAPI.Controllers.RoleController.GetAll">
+            <summary>
+            Получить все роли (Токен обязателе, Админ)
+            </summary>
+            <returns></returns>
+            <response code="200">Успешное выполнение</response>
+            <response code="400">Ошибка API</response>
         </member>
         <member name="M:BlagodarniStoreAPI.Controllers.UserController.Get(System.Int32)">
             <summary>

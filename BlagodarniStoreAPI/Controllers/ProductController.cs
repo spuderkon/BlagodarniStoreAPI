@@ -16,12 +16,24 @@ namespace BlagodarniStoreAPI.Controllers
 
         IProductRepository _iProductRepository;
 
-        public ProductController(IProductRepository productRepository)
+        public ProductController(IProductRepository iProductRepository)
         {
-            _iProductRepository = productRepository;
+            _iProductRepository = iProductRepository;
         }
 
         #region GET
+
+        /// <summary>
+        /// Получить все продукты
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">Успешное выполнение</response>
+        /// <response code="400">Ошибка API</response>
+        [HttpGet("GetAll")]
+        public ActionResult<IEnumerable<Product>> GetAll()
+        {
+            return _iProductRepository.GetAll();
+        }
 
         /// <summary>
         /// Получить продукты по категории родителя
@@ -42,7 +54,7 @@ namespace BlagodarniStoreAPI.Controllers
         #region POST
 
         /// <summary>
-        /// Создать новый продукт (Токен обязателен)
+        /// Создать новый продукт (Токен обязателен, Админ)
         /// </summary>
         /// <remarks>
         /// Пример запроса:
@@ -61,7 +73,7 @@ namespace BlagodarniStoreAPI.Controllers
         /// <returns></returns>
         /// <response code="200">Успешное выполнение</response>
         /// <response code="400">Ошибка API</response>
-        [HttpPost("Add")]//, Authorize(Roles = "admin")
+        [HttpPost("Add"), Authorize(Roles = "admin")]
         public IActionResult Add([FromBody] Product product)
         {
             try

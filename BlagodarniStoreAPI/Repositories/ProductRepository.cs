@@ -17,6 +17,12 @@ namespace BlagodarniStoreAPI.Repositories
 
         #region GET
 
+        public List<Product> GetAll()
+        {
+            var products = _context.Products;
+            return LoadData(products).ToList();
+        }
+
         public List<Product>? GetByParentId(int CategoryId)
         {
             var products = _context.Products.Where(x => x.Category.ParentId == CategoryId).Include(x=> x.Unit);

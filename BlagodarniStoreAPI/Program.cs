@@ -87,6 +87,9 @@ builder.Services.AddTransient<IProductRepository, ProductRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<ICustomerAddressRepository, CustomerAddressRepository>();
 builder.Services.AddTransient<ICartRepository, CartRepository>();
+builder.Services.AddTransient<IRoleRepository, RoleRepository>();
+builder.Services.AddTransient<IUnitRepository, UnitRepository>();
+builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
 
 var app = builder.Build();
 

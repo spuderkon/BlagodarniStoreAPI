@@ -4,7 +4,7 @@ namespace BlagodarniStoreAPI.Interfaces
 {
     public interface IUserRepository
     {
-        public User? Get(int id);
+        User? Get(int id);
         //User? Add(User user);
     }
 }
