@@ -15,7 +15,7 @@ public partial class Order
 
     public decimal TotalPrice { get; set; }
 
-    public int PaymentId { get; set; }
+    public int PaymentMethodId { get; set; }
 
     public bool Paid { get; set; }
 

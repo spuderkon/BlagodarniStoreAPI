@@ -114,7 +114,7 @@ public partial class MeatStoreContext : DbContext
             entity.Property(e => e.TotalPrice).HasColumnType("money");
 
             entity.HasOne(d => d.Payment).WithMany(p => p.Orders)
-                .HasForeignKey(d => d.PaymentId)
+                .HasForeignKey(d => d.PaymentMethodId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Order_Payment");
 

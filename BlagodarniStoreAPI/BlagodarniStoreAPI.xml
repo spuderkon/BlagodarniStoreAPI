@@ -26,7 +26,7 @@
                     "Surname": "Surname",
                     "Lastname": "Lastname",
                     "Email": "Email@email.com",
-                    "PhoneNumber": "79999999999", MAX_LENGTH(11)
+                    "PhoneNumber": "79999999999",
                     "Password": "Password",
                     "Address": "Address"
                  }
