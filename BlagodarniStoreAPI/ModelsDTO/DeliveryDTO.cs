@@ -13,7 +13,6 @@ namespace BlagodarniStoreAPI.ModelsDTO
             CourierId = delivery.CourierId;
             DateArrive = delivery.DateArrive;
             Taken = delivery.Taken;
-            Address = delivery.Address;
         }
 
         [Key]
@@ -22,7 +21,5 @@ namespace BlagodarniStoreAPI.ModelsDTO
         new public int CourierId { get; set; }
         new public DateTime DateArrive { get; set; }
         new public bool Taken { get; set; }
-        [StringLength(50)]
-        new public string Address { get; set; }
     }
 }

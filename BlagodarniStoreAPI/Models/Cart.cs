@@ -15,9 +15,9 @@ public partial class Cart
 
     public int? OrderId { get; set; }
 
-    public virtual User? Customer { get; set; } = null!;
+    public virtual User Customer { get; set; } = null!;
 
     public virtual Order? Order { get; set; }
 
-    public virtual Product? Product { get; set; } = null!;
+    public virtual Product Product { get; set; } = null!;
 }

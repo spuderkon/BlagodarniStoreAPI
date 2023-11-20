@@ -15,8 +15,6 @@ public partial class Delivery
 
     public bool Taken { get; set; }
 
-    public string Address { get; set; } = null!;
-
     public virtual User Courier { get; set; } = null!;
 
     public virtual Order IdNavigation { get; set; } = null!;

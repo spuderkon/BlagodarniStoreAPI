@@ -4,6 +4,7 @@ using BlagodarniStoreAPI.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration.UserSecrets;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -25,7 +26,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
     };
-
 });
 
 builder.Services.AddControllers();
@@ -80,7 +80,7 @@ builder.Services.AddSwaggerGen(options =>
     });*/
 });
 
-string connection = builder.Configuration.GetConnectionString("MeatStore");
+string connection = builder.Configuration.GetConnectionString("MeatStore")!;
 builder.Services.AddDbContext<MeatStoreContext>(options => options.UseSqlServer(connection));
 builder.Services.AddTransient<IAuthRepository, AuthRepository>();
 builder.Services.AddTransient<IProductRepository, ProductRepository>();
@@ -90,6 +90,7 @@ builder.Services.AddTransient<ICartRepository, CartRepository>();
 builder.Services.AddTransient<IRoleRepository, RoleRepository>();
 builder.Services.AddTransient<IUnitRepository, UnitRepository>();
 builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
+builder.Services.AddTransient<IOrderRepository, OrderRepository>();
 
 var app = builder.Build();
 

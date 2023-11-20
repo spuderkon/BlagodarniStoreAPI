@@ -95,7 +95,6 @@ public partial class MeatStoreContext : DbContext
             entity.ToTable("Delivery");
 
             entity.Property(e => e.Id).ValueGeneratedOnAdd();
-            entity.Property(e => e.Address).HasMaxLength(50);
             entity.Property(e => e.DateArrive).HasColumnType("datetime");
 
             entity.HasOne(d => d.Courier).WithMany(p => p.Deliveries)
@@ -113,17 +112,17 @@ public partial class MeatStoreContext : DbContext
         {
             entity.ToTable("Order");
 
+            entity.Property(e => e.Address).HasMaxLength(50);
             entity.Property(e => e.OrderDate).HasColumnType("datetime");
             entity.Property(e => e.TotalPrice).HasColumnType("money");
 
-            entity.HasOne(d => d.Payment).WithMany(p => p.Orders)
+            entity.HasOne(d => d.PaymentMethod).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.PaymentMethodId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Order_Payment");
+                .HasConstraintName("FK_Order_PaymentMethod");
 
             entity.HasOne(d => d.Status).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.StatusId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Order_Status");
         });
 

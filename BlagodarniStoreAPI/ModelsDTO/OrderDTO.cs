@@ -17,9 +17,9 @@ namespace BlagodarniStoreAPI.ModelsDTO
 
         new public int Id { get; set; }
         new public int CustomerId { get; set; }
-        new public DateTime OrderDate { get; set; }
-        new public int StatusId { get; set; }
-        new public decimal TotalPrice { get; set;}
+        new public DateTime? OrderDate { get; set; }
+        new public int? StatusId { get; set; }
+        new public decimal? TotalPrice { get; set;}
         new public int PaymentMethodId { get; set; }
         new public bool Paid { get; set; }
     }

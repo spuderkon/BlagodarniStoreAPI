@@ -28,7 +28,7 @@ namespace BlagodarniStoreAPI.Repositories
             return carts.Include(x => x.Product)
                   .Select(x => new CartDTO(x)
                   {
-                      Product = new ProductDTO(x.Product),
+                      Product = new ProductDTO(x.Product!),
                   });
         }
 
