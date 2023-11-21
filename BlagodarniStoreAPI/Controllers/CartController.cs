@@ -51,16 +51,16 @@ namespace BlagodarniStoreAPI.Controllers
         ///
         ///     [
         ///      {
-        ///       "id": 1,
-        ///       "customerId": 1,
-        ///       "productId": 3,
-        ///       "amount": 3
+        ///       "id": int,
+        ///       "customerId": int,
+        ///       "productId": int,
+        ///       "amount": int
         ///      },
         ///      {
-        ///       "id": 1,
-        ///       "customerId": 1,
-        ///       "productId": 3,
-        ///       "amount": 3
+        ///       "id": int,
+        ///       "customerId": int,
+        ///       "productId": int,
+        ///       "amount": int
         ///      },
         ///      {
         ///         ...

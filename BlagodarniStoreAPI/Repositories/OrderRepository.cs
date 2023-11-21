@@ -27,8 +27,8 @@ namespace BlagodarniStoreAPI.Repositories
             return orders
                   .Select(x => new OrderDTO(x)
                   {
-                      PaymentMethod = new PaymentMethodDTO(x.PaymentMethod),
-                      Status = new OrderStatusDTO(x.Status),
+                      PaymentMethod = new PaymentMethodDTO(x.PaymentMethod!),
+                      Status = new OrderStatusDTO(x.Status!),
                   });
         }
 
@@ -44,27 +44,25 @@ namespace BlagodarniStoreAPI.Repositories
 
 
 
-        public Order CreateMy(int customerId, Order order)
+        public Order CreateMy(int userId, Order order)
         {
-            var cart = _iCartRepository.GetMy(customerId);
-            if(cart.Count() != 0)
+            var carts = _context.Carts.Where(x => x.UserId == userId && x.OrderId == null);
+            if (carts.Count() != 0)
             {
-                if(customerId != order.CustomerId)
-                {
-                    throw new Exception("Id пользователей не совпадает");
-                }
                 Order newOrder = new Order
                 {
-                    CustomerId = order.Id,
+                    UserId = userId,
                     OrderDate = DateTime.Now,
                     StatusId = 1,
-                    TotalPrice = _context.Carts.Where(x => x.CustomerId == customerId && x.OrderId == null).Sum(x => x.Product.Price * x.Amount),
+                    TotalPrice = carts.Sum(x => x.Product.Price * x.Amount),
                     PaymentMethodId = order.PaymentMethodId,
                     Paid = order.Paid,
                     Address = order.Address,
                 };
                 _context.Orders.Add(newOrder);
                 _context.SaveChanges();
+                carts.ToList().ForEach(x => x.OrderId = newOrder.Id);
+                _iCartRepository.UpdateMy(userId, carts.ToList());
                 return newOrder;
             }
 

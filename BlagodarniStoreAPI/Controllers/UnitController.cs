@@ -21,7 +21,7 @@ namespace BlagodarniStoreAPI.Controllers
         #region GET
 
         /// <summary>
-        /// Получить все виды измерения продукта (Токен обязателен, Admin)
+        /// Получить все виды измерения продукта (Токен обязателен, Админ)
         /// </summary>
         /// <returns></returns>
         /// <response code="200">Успешное выполнение</response>

@@ -56,12 +56,12 @@ namespace BlagodarniStoreAPI.Repositories
             };
             _context.Users.Add(creatingUser);
             _context.SaveChanges();
-            var newCustomerAddress = new CustomerAddress
+            var newCustomerAddress = new UserAddress
             {
-                CustomerId = creatingUser.Id,
+                UserId = creatingUser.Id,
                 Address = creatingUser.Address,
             };
-            _context.CustomerAddresses.Add(newCustomerAddress);
+            _context.UserAddresses.Add(newCustomerAddress);
             _context.SaveChanges();
             //_customerAddressRepository.Add(newUser.Id, newUser.Address);
             var newUser = _context.Users.Include(x => x.Role).Where(x => x.Id == creatingUser.Id).FirstOrDefault();

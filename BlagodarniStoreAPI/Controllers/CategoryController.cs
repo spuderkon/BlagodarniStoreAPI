@@ -20,7 +20,7 @@ namespace BlagodarniStoreAPI.Controllers
         #region GET
 
         /// <summary>
-        /// Получить все категории (Токен обязателен, Admin)
+        /// Получить все категории (Токен обязателен, Админ)
         /// </summary>
         /// <returns></returns>
         /// <response code="200">Успешное выполнение</response>

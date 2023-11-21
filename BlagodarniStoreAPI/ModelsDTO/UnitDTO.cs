@@ -13,10 +13,10 @@ namespace BlagodarniStoreAPI.ModelsDTO
         }
 
         [Key]
-        public int Id { get; set; }
+        new public int Id { get; set; }
         [StringLength(30)]
-        public int Measure { get; set; } 
+        new public int Measure { get; set; } 
         [StringLength(30)]
-        public string Name { get; set; } = null!;
+        new public string Name { get; set; } = null!;
     }
 }

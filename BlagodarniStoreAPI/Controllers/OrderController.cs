@@ -24,6 +24,12 @@ namespace BlagodarniStoreAPI.Controllers
 
         #region GET
 
+        /// <summary>
+        /// Получить все заказы не назначенные на доставку (Токен обязателен, Админ)
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">Успешное выполнение</response>
+        /// <response code="400">Ошибка API</response>
         [HttpGet("GetNotInDelivery"),Authorize(Roles = "admin")]
         public ActionResult<IEnumerable<Order>> GetNotInDelivery()
         {
@@ -34,7 +40,7 @@ namespace BlagodarniStoreAPI.Controllers
         public decimal Test()
         {
             int userId = int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value);
-            var sum = _context.Carts.Where(x => x.CustomerId == userId && x.OrderId == null).Sum(x => x.Product.Price * x.Amount);
+            var sum = _context.Carts.Where(x => x.UserId == userId && x.OrderId == null).Sum(x => x.Product.Price * x.Amount);
             return sum;
         }
 
@@ -42,6 +48,23 @@ namespace BlagodarniStoreAPI.Controllers
 
         #region POST
 
+        /// <summary>
+        /// Cоздать заказ (Токен обязателен)
+        /// </summary>
+        /// <remarks>
+        /// Пример запроса:
+        ///     
+        ///     {
+        ///        "PaymentMethodId": integer,
+        ///        "Paid": bool,
+        ///        "Address": string,
+        ///     }
+        ///
+        /// </remarks>
+        /// <param name="order">Order</param>
+        /// <returns></returns>
+        /// <response code="200">Успешное выполнение</response>
+        /// <response code="400">Ошибка API</response>
         [HttpPost("CreateMy"), Authorize]
         public IActionResult CreateMy(Order order)
         {

@@ -17,9 +17,9 @@ namespace BlagodarniStoreAPI.Repositories
 
         #region GET
 
-        public List<Cart> GetMy(int customerId)
+        public List<Cart> GetMy(int userId)
         {
-            var carts = _context.Carts.Where(x => x.CustomerId == customerId && x.OrderId == null);
+            var carts = _context.Carts.Where(x => x.UserId == userId && x.OrderId == null);
             return LoadData(carts).ToList();
         }
 
@@ -42,7 +42,7 @@ namespace BlagodarniStoreAPI.Repositories
 
         #region UPDATE
 
-        public void UpdateMy(int customerId, List<Cart> carts)
+        public void UpdateMy(int userId, List<Cart> carts)
         {
             foreach (var cart in carts)
             {

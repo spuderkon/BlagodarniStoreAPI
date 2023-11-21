@@ -26,11 +26,11 @@ namespace BlagodarniStoreAPI.Controllers
 
         #region GET
 
-        /*[HttpGet("IsAuth"), Authorize]
+        [HttpGet("IsAuth"), Authorize]
         public IActionResult IsAuth()
         {
             return Ok();
-        }*/
+        }
 
         #endregion
 
@@ -75,13 +75,13 @@ namespace BlagodarniStoreAPI.Controllers
         /// Пример запроса:
         ///     
         ///     {
-        ///        "Name": "Name",
-        ///        "Surname": "Surname",
-        ///        "Lastname": "Lastname",
-        ///        "Email": "Email@email.com",
-        ///        "PhoneNumber": "79999999999",
-        ///        "Password": "Password",
-        ///        "Address": "Address"
+        ///        "Name": string,
+        ///        "Surname": string,
+        ///        "Lastname": string,
+        ///        "Email": string,
+        ///        "PhoneNumber": string(MAX_LENGTH(11)),
+        ///        "Password": string,
+        ///        "Address": string
         ///     }
         ///
         /// </remarks>

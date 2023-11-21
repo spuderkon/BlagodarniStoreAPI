@@ -22,6 +22,12 @@ namespace BlagodarniStoreAPI.Repositories
             return LoadData(user).FirstOrDefault();
         }
 
+        public User? GetMy(int id)
+        {
+            var user = _context.Users.Where(x => x.Id == id);
+            return LoadData(user).FirstOrDefault();
+        }
+
         private IQueryable<User> LoadData(IQueryable<User> users)
         {
             return users

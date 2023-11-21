@@ -7,7 +7,7 @@ public partial class Order
 {
     public int Id { get; set; }
 
-    public int CustomerId { get; set; }
+    public int? UserId { get; set; }
 
     public DateTime? OrderDate { get; set; }
 
@@ -25,7 +25,7 @@ public partial class Order
 
     public virtual Delivery? Delivery { get; set; }
 
-    public virtual PaymentMethod? PaymentMethod { get; set; }
+    public virtual PaymentMethod? PaymentMethod { get; set; } = null!;
 
     public virtual OrderStatus? Status { get; set; }
 }

@@ -35,6 +35,12 @@ namespace BlagodarniStoreAPI.Controllers
             return user;
         }
 
+        [HttpGet("GetMy"), Authorize]
+        public ActionResult<User> Get() 
+        { 
+            return _iUserRepository.GetMy(int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value))!;
+        }
+
         #endregion
 
         #region POST

@@ -6,6 +6,6 @@ namespace BlagodarniStoreAPI.Interfaces
     {
         List<Order> GetNotInDelivery();
 
-        Order CreateMy(int customerId, Order order);
+        Order CreateMy(int userId, Order order);
     }
 }

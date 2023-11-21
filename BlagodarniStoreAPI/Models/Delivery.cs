@@ -9,13 +9,13 @@ public partial class Delivery
 
     public int OrderId { get; set; }
 
-    public int CourierId { get; set; }
+    public int UserId { get; set; }
 
     public DateTime DateArrive { get; set; }
 
     public bool Taken { get; set; }
 
-    public virtual User Courier { get; set; } = null!;
+    public virtual User User { get; set; } = null!;
 
     public virtual Order IdNavigation { get; set; } = null!;
 }

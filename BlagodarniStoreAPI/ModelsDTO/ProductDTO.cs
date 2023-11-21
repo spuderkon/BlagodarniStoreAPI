@@ -16,16 +16,16 @@ namespace BlagodarniStoreAPI.ModelsDTO
             Price = product.Price;
         }
         [Key]
-        public int Id { get; set; }
+        new public int Id { get; set; }
         [StringLength(30)]
-        public string Name { get; set; } = null!;
-        public int CategoryId { get; set; }
+        new public string Name { get; set; } = null!;
+        new public int CategoryId { get; set; }
         [StringLength(30)]
-        public string Description { get; set; } = null!;
+        new public string Description { get; set; } = null!;
         [StringLength(300)]
-        public string Image { get; set; } = null!;
-        public int UnitId { get; set; }
-        public decimal Price { get; set; }
+        new public string Image { get; set; } = null!;
+        new public int UnitId { get; set; }
+        new public decimal Price { get; set; }
 
     }
 }

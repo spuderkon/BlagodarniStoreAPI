@@ -7,7 +7,7 @@ namespace BlagodarniStoreAPI.ModelsDTO
         public OrderDTO(Order order) 
         { 
             Id = order.Id;
-            CustomerId = order.CustomerId;
+            UserId = order.UserId;
             OrderDate = order.OrderDate;
             StatusId = order.StatusId;
             TotalPrice = order.TotalPrice;
@@ -16,7 +16,7 @@ namespace BlagodarniStoreAPI.ModelsDTO
         }
 
         new public int Id { get; set; }
-        new public int CustomerId { get; set; }
+        new public int? UserId { get; set; }
         new public DateTime? OrderDate { get; set; }
         new public int? StatusId { get; set; }
         new public decimal? TotalPrice { get; set;}

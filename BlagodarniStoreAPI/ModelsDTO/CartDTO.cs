@@ -8,7 +8,7 @@ namespace BlagodarniStoreAPI.ModelsDTO
         public CartDTO(Cart cart)
         {
             Id = cart.Id;
-            CustomerId = cart.CustomerId;
+            UserId = cart.UserId;
             ProductId = cart.ProductId;
             Amount = cart.Amount;
             OrderId = cart.OrderId;
@@ -16,7 +16,7 @@ namespace BlagodarniStoreAPI.ModelsDTO
 
         [Key]
         new public int Id { get; set; }
-        new public int CustomerId { get; set; }
+        new public int UserId { get; set; }
         new public int ProductId { get; set; }
         new public int Amount { get; set; }
         new public int? OrderId { get; set; }

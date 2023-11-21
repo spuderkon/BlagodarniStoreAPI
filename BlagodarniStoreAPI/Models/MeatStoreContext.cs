@@ -19,8 +19,6 @@ public partial class MeatStoreContext : DbContext
 
     public virtual DbSet<Category> Categories { get; set; }
 
-    public virtual DbSet<CustomerAddress> CustomerAddresses { get; set; }
-
     public virtual DbSet<Delivery> Deliveries { get; set; }
 
     public virtual DbSet<Order> Orders { get; set; }
@@ -37,6 +35,8 @@ public partial class MeatStoreContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
+    public virtual DbSet<UserAddress> UserAddresses { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
@@ -50,11 +50,6 @@ public partial class MeatStoreContext : DbContext
         {
             entity.ToTable("Cart");
 
-            entity.HasOne(d => d.Customer).WithMany(p => p.Carts)
-                .HasForeignKey(d => d.CustomerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Cart_User");
-
             entity.HasOne(d => d.Order).WithMany(p => p.Carts)
                 .HasForeignKey(d => d.OrderId)
                 .HasConstraintName("FK_Cart_Order");
@@ -63,6 +58,11 @@ public partial class MeatStoreContext : DbContext
                 .HasForeignKey(d => d.ProductId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Cart_Product");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Carts)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Cart_User");
         });
 
         modelBuilder.Entity<Category>(entity =>
@@ -76,20 +76,6 @@ public partial class MeatStoreContext : DbContext
                 .HasConstraintName("FK_Category_Category");
         });
 
-        modelBuilder.Entity<CustomerAddress>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK_Addresses");
-
-            entity.ToTable("CustomerAddress");
-
-            entity.Property(e => e.Address).HasMaxLength(50);
-
-            entity.HasOne(d => d.Customer).WithMany(p => p.CustomerAddresses)
-                .HasForeignKey(d => d.CustomerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Addresses_User");
-        });
-
         modelBuilder.Entity<Delivery>(entity =>
         {
             entity.ToTable("Delivery");
@@ -97,8 +83,8 @@ public partial class MeatStoreContext : DbContext
             entity.Property(e => e.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.DateArrive).HasColumnType("datetime");
 
-            entity.HasOne(d => d.Courier).WithMany(p => p.Deliveries)
-                .HasForeignKey(d => d.CourierId)
+            entity.HasOne(d => d.User).WithMany(p => p.Deliveries)
+                .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Delivery_User");
 
@@ -198,6 +184,20 @@ public partial class MeatStoreContext : DbContext
                 .HasForeignKey(d => d.RoleId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_User_Role");
+        });
+
+        modelBuilder.Entity<UserAddress>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_Addresses");
+
+            entity.ToTable("UserAddress");
+
+            entity.Property(e => e.Address).HasMaxLength(50);
+
+            entity.HasOne(d => d.User).WithMany(p => p.UserAddresses)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Addresses_User");
         });
 
         OnModelCreatingPartial(modelBuilder);
