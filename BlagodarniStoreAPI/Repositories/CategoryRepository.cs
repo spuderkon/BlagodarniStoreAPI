@@ -16,8 +16,7 @@ namespace BlagodarniStoreAPI.Repositories
         #region GET
         public List<Category> GetAll()
         {
-            var categories = _context.Categories;
-            return LoadData(categories).ToList();
+            return LoadData(_context.Categories).ToList();
         }
 
         private IQueryable<Category> LoadData(IQueryable<Category> categories)

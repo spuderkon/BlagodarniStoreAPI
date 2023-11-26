@@ -42,7 +42,7 @@ namespace BlagodarniStoreAPI.Repositories
 
         #region UPDATE
 
-        public void UpdateMy(int userId, List<Cart> carts)
+        public void UpdateMy(List<Cart> carts,int userId)
         {
             if (CartsBelongUser(userId,carts))
             {

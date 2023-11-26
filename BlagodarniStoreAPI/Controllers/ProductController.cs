@@ -40,7 +40,7 @@ namespace BlagodarniStoreAPI.Controllers
         /// <summary>
         /// Получить продукты по категории родителя
         /// </summary>
-        /// <param name="id">Id</param>
+        /// <param name="id">Id категории</param>
         /// <returns></returns>
         /// <response code="200">Успешное выполнение</response>
         /// <response code="400">Ошибка API</response>
@@ -61,12 +61,12 @@ namespace BlagodarniStoreAPI.Controllers
         /// Пример запроса:
         ///     
         ///     {
-        ///        "Name": "Name",
-        ///        "CategoryId": 1,
-        ///        "Description": "Description",
-        ///        "Image": "Image.jpg",
-        ///        "UnitId": 1,
-        ///        "Price": 1
+        ///        "Name": string,
+        ///        "CategoryId": int,
+        ///        "Description": string,
+        ///        "Image": string,
+        ///        "UnitId": int,
+        ///        "Price": int
         ///     }
         ///
         /// </remarks>

@@ -31,8 +31,7 @@ namespace BlagodarniStoreAPI.Controllers
         [HttpGet("Get/{id}")]
         public ActionResult<User> Get(int id)
         {
-            User user = _iUserRepository.Get(id)!;
-            return user;
+            return _iUserRepository.Get(id);
         }
 
         [HttpGet("GetMy"), Authorize]
@@ -42,9 +41,9 @@ namespace BlagodarniStoreAPI.Controllers
         }
 
         [HttpGet("GetCouriers"), Authorize(Roles = "admin")]
-        public ActionResult<IEnumerable<Cart>> GetCouriers()
+        public ActionResult<IEnumerable<User>> GetCouriers()
         {
-            return Ok(_iUserRepository.GetCouriers());
+            return _iUserRepository.GetCouriers();
         }
 
         #endregion

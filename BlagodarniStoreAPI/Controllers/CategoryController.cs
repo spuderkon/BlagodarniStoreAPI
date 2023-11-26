@@ -20,12 +20,12 @@ namespace BlagodarniStoreAPI.Controllers
         #region GET
 
         /// <summary>
-        /// Получить все категории (Токен обязателен, Админ)
+        /// Получить все категории (Токен обязателен)
         /// </summary>
         /// <returns></returns>
         /// <response code="200">Успешное выполнение</response>
         /// <response code="400">Ошибка API</response>
-        [HttpGet("GetAll"), Authorize(Roles = "admin")]
+        [HttpGet("GetAll"), Authorize]
         public ActionResult<IEnumerable<Category>> GetAll()
         {
             return _iCategoryRepository.GetAll();

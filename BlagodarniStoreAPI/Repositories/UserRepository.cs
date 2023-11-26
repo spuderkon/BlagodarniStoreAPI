@@ -18,20 +18,17 @@ namespace BlagodarniStoreAPI.Repositories
 
         public User? Get(int id)
         {
-            var user = _context.Users.Where(x => x.Id == id);
-            return LoadData(user).FirstOrDefault();
+            return LoadData(_context.Users.Where(x => x.Id == id)).FirstOrDefault();
         }
 
 
         public User? GetMy(int id)
         {
-            var user = _context.Users.Where(x => x.Id == id);
-            return LoadData(user).FirstOrDefault();
+            return LoadData(_context.Users.Where(x => x.Id == id)).FirstOrDefault();
         }
         public List<User> GetCouriers()
         {
-            var users = _context.Users.Where(x => x.RoleId == 2);
-            return LoadData(users).ToList();
+            return LoadData(_context.Users.Where(x => x.Role.Name == "courier")).ToList();
         }
 
         private IQueryable<User> LoadData(IQueryable<User> users)

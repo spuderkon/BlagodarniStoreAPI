@@ -7,6 +7,6 @@ namespace BlagodarniStoreAPI.Interfaces
     {
         public User? ValidUser(string phoneNumber, string password);
         public User? Register(User user);
-        public bool SetNewPassword(int userId, string phoneNumber, string password);
+        public bool SetNewPassword(string phoneNumber, string password, int userId);
     }
 }

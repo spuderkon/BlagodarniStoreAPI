@@ -20,12 +20,25 @@ namespace BlagodarniStoreAPI.Controllers
 
         #region GET
 
+        /// <summary>
+        /// Получить информацию о доставке (Токен обязателен, Курьер)
+        /// </summary>
+        /// <param name="id">Id</param>
+        /// <returns></returns>
+        /// <response code="200">Успешное выполнение</response>
+        /// <response code="400">Ошибка API</response>
         [HttpGet("Get/{id}"), Authorize(Roles = "courier")]
         public ActionResult Get(int id)
         {
             return Ok(_iDeliveryRepository.Get(id, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value)));
         }
 
+        /// <summary>
+        /// Получить все активные заказы на доставку (Токен обязателен, Курьер)
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">Успешное выполнение</response>
+        /// <response code="400">Ошибка API</response>
         [HttpGet("GetMyAllActive"), Authorize(Roles = "courier")]
         public ActionResult<IEnumerable<Delivery>> GetMyAllActive()
         {

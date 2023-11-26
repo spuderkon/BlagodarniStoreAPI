@@ -66,7 +66,7 @@ namespace BlagodarniStoreAPI.Repositories
         #endregion
 
         #region PUT
-        public bool SetNewPassword(int userId, string phoneNumber, string password)
+        public bool SetNewPassword(string phoneNumber, string password, int userId)
         {
             var user = _context.Users.FirstOrDefault(x => x.PhoneNumber == phoneNumber);
             if (user is not null)

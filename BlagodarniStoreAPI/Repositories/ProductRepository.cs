@@ -19,14 +19,12 @@ namespace BlagodarniStoreAPI.Repositories
 
         public List<Product> GetAll()
         {
-            var products = _context.Products;
-            return LoadData(products).ToList();
+            return LoadData(_context.Products).ToList();
         }
 
         public List<Product>? GetByParentId(int id)
         {
-            var products = _context.Products.Where(x => x.Category.ParentId == id).Include(x=> x.Unit);
-            return LoadData(products).ToList();
+            return LoadData(_context.Products.Where(x => x.Category.ParentId == id).Include(x => x.Unit)).ToList();
         }
         private IQueryable<Product> LoadData(IQueryable<Product> products)
         {

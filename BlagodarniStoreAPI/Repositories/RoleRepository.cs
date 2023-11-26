@@ -16,8 +16,7 @@ namespace BlagodarniStoreAPI.Repositories
         #region GET
         public List<Role> GetAll() 
         {
-            var roles = _context.Roles;
-            return LoadData(roles).ToList();
+            return LoadData(_context.Roles).ToList();
         }
 
         private IQueryable<Role> LoadData(IQueryable<Role> roles)

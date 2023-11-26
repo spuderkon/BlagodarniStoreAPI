@@ -6,8 +6,7 @@ namespace BlagodarniStoreAPI.Interfaces
     public interface IOrderRepository
     {
         List<Order> GetNotInDelivery();
-
-        Order CreateMy(int userId, OrderDTO order);
+        Order CreateMy(Order order, int customerId);
         void OrderPaid(int deliveryId, int courierId);
         void OrderDelivered(int deliveryId, int courierId);
     }

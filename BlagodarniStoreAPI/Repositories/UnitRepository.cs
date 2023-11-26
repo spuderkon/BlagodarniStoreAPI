@@ -16,8 +16,7 @@ namespace BlagodarniStoreAPI.Repositories
         #region GET
         public List<Unit> GetAll()
         {
-            var units = _context.Units;
-            return LoadData(units).ToList();
+            return LoadData(_context.Units).ToList();
         }
 
         private IQueryable<Unit> LoadData(IQueryable<Unit> units)

@@ -127,9 +127,9 @@ namespace BlagodarniStoreAPI.Controllers
         public IActionResult SetNewPassword(string phoneNumber, string newPassword)
         { 
             if (_iAuthRepository.SetNewPassword(
-                int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value),
                 phoneNumber, 
-                newPassword)) 
+                newPassword,
+                int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value))) 
                 return Ok();
             else return BadRequest();
         }

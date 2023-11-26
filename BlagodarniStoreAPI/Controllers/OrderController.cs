@@ -37,14 +37,6 @@ namespace BlagodarniStoreAPI.Controllers
             return _iOrderRepository.GetNotInDelivery();
         }
 
-        [HttpGet("test"), Authorize]
-        public decimal Test()
-        {
-            int userId = int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value);
-            var sum = _context.Carts.Where(x => x.UserId == userId && x.OrderId == null).Sum(x => x.Product.Price * x.Amount);
-            return sum;
-        }
-
         #endregion
 
         #region POST
@@ -67,28 +59,29 @@ namespace BlagodarniStoreAPI.Controllers
         /// <response code="200">Успешное выполнение</response>
         /// <response code="400">Ошибка API</response>
         [HttpPost("CreateMy"), Authorize]
-        public IActionResult CreateMy([FromBody] OrderDTO order)
+        public IActionResult CreateMy([FromBody] Order order)
         {
             try
             {
-                return Ok(_iOrderRepository.CreateMy(int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value), order));
+                return Ok(_iOrderRepository.CreateMy(order, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value)));
             }
             catch (Exception ex) 
             {
                 return BadRequest(ErrorTools.GetInfo(ex));
             }
-            /*var cart = _iCartRepository.GetMy(int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
-            if (cart.Count() == 0)
-            { 
-                
-            }
-            return*/
         }
 
         #endregion
 
         #region PUT
 
+        /// <summary>
+        /// Отметить что заказ оплачен (Токен обязателен, Курьер)
+        /// </summary>
+        /// <returns></returns>
+        /// <param name="id">Id заказа</param>
+        /// <response code="200">Успешное выполнение</response>
+        /// <response code="400">Ошибка API</response>
         [HttpPut("OrderPaid"), Authorize(Roles = "courier")]
         public IActionResult OrderPaid(int id)
         {
@@ -107,6 +100,13 @@ namespace BlagodarniStoreAPI.Controllers
 
         #region PUT
 
+        /// <summary>
+        /// Отметить что получен клиентом (Токен обязателен, Курьер)
+        /// </summary>
+        /// <returns></returns>
+        /// <param name="id">Id заказа</param>
+        /// <response code="200">Успешное выполнение</response>
+        /// <response code="400">Ошибка API</response>
         [HttpPut("OrderDelivered"), Authorize(Roles = "courier")]
         public IActionResult OrderDelivered(int id)
         {

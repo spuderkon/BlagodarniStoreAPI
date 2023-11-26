@@ -19,8 +19,7 @@ namespace BlagodarniStoreAPI.Repositories
         #region GET
         public List<Order> GetNotInDelivery()
         {
-            var orders = _context.Orders.Where(x => x.StatusId == 1);
-            return LoadData(orders).ToList();
+            return LoadData(_context.Orders.Where(x => x.StatusId == 1)).ToList();
         }
 
         private IQueryable<Order> LoadData(IQueryable<Order> orders)
@@ -37,12 +36,7 @@ namespace BlagodarniStoreAPI.Repositories
 
         #region ADD
 
-
-        //
-        //Сделать добавление OrderId в Cart при форманировании заказа!
-        //
-
-        public Order CreateMy(int userId, OrderDTO order)
+        public Order CreateMy(Order order, int userId)
         {
             var carts = _context.Carts.Where(x => x.UserId == userId && x.OrderId == null);
             if (carts.Count() != 0)
@@ -56,7 +50,7 @@ namespace BlagodarniStoreAPI.Repositories
                     UserId = userId,
                     OrderDate = DateTime.Now,
                     StatusId = 1,
-                    TotalPrice = carts.Sum(x => x.Product.Price * x.Amount),
+                    TotalPrice = carts.Sum(x => x.Product!.Price * x.Amount),
                     PaymentMethodId = order.PaymentMethodId,
                     Paid = order.Paid,
                     Address = order.Address,
@@ -64,7 +58,7 @@ namespace BlagodarniStoreAPI.Repositories
                 _context.Orders.Add(newOrder);
                 _context.SaveChanges();
                 carts.ToList().ForEach(x => x.OrderId = newOrder.Id);
-                _iCartRepository.UpdateMy(userId, carts.ToList());
+                _iCartRepository.UpdateMy(carts.ToList(), userId);
                 return newOrder;
             }
 

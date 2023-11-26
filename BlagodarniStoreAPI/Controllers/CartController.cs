@@ -77,7 +77,7 @@ namespace BlagodarniStoreAPI.Controllers
         { 
             try
             {
-                _iCartRepository.UpdateMy(int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value), carts);
+                _iCartRepository.UpdateMy(carts, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
                 return Ok();
             }
             catch (Exception ex)
