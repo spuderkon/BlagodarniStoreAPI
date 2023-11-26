@@ -74,7 +74,7 @@ namespace BlagodarniStoreAPI.Controllers
         /// <response code="400">Ошибка API</response>
         [HttpPut("UpdateMy"), Authorize]
         public IActionResult UpdateMy([FromBody] List<Cart> carts)
-        {
+        { 
             try
             {
                 _iCartRepository.UpdateMy(int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value), carts);

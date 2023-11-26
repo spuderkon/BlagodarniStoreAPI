@@ -12,7 +12,6 @@ namespace BlagodarniStoreAPI.ModelsDTO
             OrderId = delivery.OrderId;
             UserId = delivery.UserId;
             DateArrive = delivery.DateArrive;
-            Taken = delivery.Taken;
         }
 
         [Key]
@@ -20,6 +19,5 @@ namespace BlagodarniStoreAPI.ModelsDTO
         new public int OrderId { get; set; }
         new public int UserId { get; set; }
         new public DateTime DateArrive { get; set; }
-        new public bool Taken { get; set; }
     }
 }

@@ -11,11 +11,13 @@ namespace BlagodarniStoreAPI.Repositories
     {
         MeatStoreContext _context;
         Random _random;
+        IUserAddressRepository _userAddressRepository;
 
-        public AuthRepository(MeatStoreContext context)
+        public AuthRepository(MeatStoreContext context, IUserAddressRepository userAddressRepository)
         {
             _context = context;
             _random = new Random();
+            _userAddressRepository = userAddressRepository;
         }
 
         public User? ValidUser(string phoneNumber, string password)
@@ -56,14 +58,7 @@ namespace BlagodarniStoreAPI.Repositories
             };
             _context.Users.Add(creatingUser);
             _context.SaveChanges();
-            var newCustomerAddress = new UserAddress
-            {
-                UserId = creatingUser.Id,
-                Address = creatingUser.Address,
-            };
-            _context.UserAddresses.Add(newCustomerAddress);
-            _context.SaveChanges();
-            //_customerAddressRepository.Add(newUser.Id, newUser.Address);
+            _userAddressRepository.Add(creatingUser.Id, user.Address);
             var newUser = _context.Users.Include(x => x.Role).Where(x => x.Id == creatingUser.Id).FirstOrDefault();
             return newUser;
         }
@@ -71,11 +66,15 @@ namespace BlagodarniStoreAPI.Repositories
         #endregion
 
         #region PUT
-        public bool SetNewPassword(string phoneNumber, string password)
+        public bool SetNewPassword(int userId, string phoneNumber, string password)
         {
             var user = _context.Users.FirstOrDefault(x => x.PhoneNumber == phoneNumber);
             if (user is not null)
             {
+                if(userId != user.Id)
+                {
+                    throw new Exception("Id не совпадаю");
+                }
                 string salt = RegistrationTools.GetRandomKey(_random.Next(128, 256));
                 string pass = RegistrationTools.GetPasswordSha256(password, salt);
                 user.Password = pass;

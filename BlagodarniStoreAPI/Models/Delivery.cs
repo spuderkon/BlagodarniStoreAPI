@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BlagodarniStoreAPI.Models;
 
@@ -11,11 +13,8 @@ public partial class Delivery
 
     public int UserId { get; set; }
 
-    public DateTime DateArrive { get; set; }
+    public DateTime DateArrive {  get; set; }
+    public virtual Order Order { get; set; } = null!;
 
-    public bool Taken { get; set; }
-
-    public virtual User User { get; set; } = null!;
-
-    public virtual Order IdNavigation { get; set; } = null!;
+    public virtual User? User { get; set; }
 }

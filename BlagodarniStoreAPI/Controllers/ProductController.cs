@@ -1,5 +1,7 @@
-﻿using BlagodarniStoreAPI.Interfaces;
+﻿using AutoMapper;
+using BlagodarniStoreAPI.Interfaces;
 using BlagodarniStoreAPI.Models;
+using BlagodarniStoreAPI.ModelsDTO;
 using BlagodarniStoreAPI.Repositories;
 using BlagodarniStoreAPI.Tools;
 using Microsoft.AspNetCore.Authorization;
@@ -45,8 +47,7 @@ namespace BlagodarniStoreAPI.Controllers
         [HttpGet("GetByParent/{Id}")]
         public ActionResult<IEnumerable<Product>> GetByParentId(int id)
         {
-            var Products = _iProductRepository.GetByParentId(id);
-            return Products == null ? NotFound() : Products;
+            return _iProductRepository.GetByParentId(id)!;
         }
 
         #endregion

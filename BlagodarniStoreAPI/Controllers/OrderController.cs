@@ -1,5 +1,6 @@
 ﻿using BlagodarniStoreAPI.Interfaces;
 using BlagodarniStoreAPI.Models;
+using BlagodarniStoreAPI.ModelsDTO;
 using BlagodarniStoreAPI.Repositories;
 using BlagodarniStoreAPI.Tools;
 using Microsoft.AspNetCore.Authorization;
@@ -55,7 +56,7 @@ namespace BlagodarniStoreAPI.Controllers
         /// Пример запроса:
         ///     
         ///     {
-        ///        "PaymentMethodId": integer,
+        ///        "PaymentMethodId": int,
         ///        "Paid": bool,
         ///        "Address": string,
         ///     }
@@ -66,7 +67,7 @@ namespace BlagodarniStoreAPI.Controllers
         /// <response code="200">Успешное выполнение</response>
         /// <response code="400">Ошибка API</response>
         [HttpPost("CreateMy"), Authorize]
-        public IActionResult CreateMy(Order order)
+        public IActionResult CreateMy([FromBody] OrderDTO order)
         {
             try
             {
@@ -88,7 +89,37 @@ namespace BlagodarniStoreAPI.Controllers
 
         #region PUT
 
+        [HttpPut("OrderPaid"), Authorize(Roles = "courier")]
+        public IActionResult OrderPaid(int id)
+        {
+            try
+            {
+                _iOrderRepository.OrderPaid(id, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ErrorTools.GetInfo(ex));
+            }
+        }
 
+        #endregion
+
+        #region PUT
+
+        [HttpPut("OrderDelivered"), Authorize(Roles = "courier")]
+        public IActionResult OrderDelivered(int id)
+        {
+            try
+            {
+                _iOrderRepository.OrderDelivered(id, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ErrorTools.GetInfo(ex));
+            }
+        }
 
         #endregion
 

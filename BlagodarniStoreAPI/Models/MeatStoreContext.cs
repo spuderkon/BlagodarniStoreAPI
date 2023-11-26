@@ -80,18 +80,17 @@ public partial class MeatStoreContext : DbContext
         {
             entity.ToTable("Delivery");
 
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.DateArrive).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Order).WithMany(p => p.Deliveries)
+                .HasForeignKey(d => d.OrderId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Delivery_Order1");
 
             entity.HasOne(d => d.User).WithMany(p => p.Deliveries)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Delivery_User");
-
-            entity.HasOne(d => d.IdNavigation).WithOne(p => p.Delivery)
-                .HasForeignKey<Delivery>(d => d.Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Delivery_Order");
         });
 
         modelBuilder.Entity<Order>(entity =>

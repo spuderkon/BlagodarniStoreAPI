@@ -6,5 +6,6 @@ namespace BlagodarniStoreAPI.Interfaces
     {
         User? Get(int userId);
         User? GetMy(int userId);
+        List<User> GetCouriers();
     }
 }

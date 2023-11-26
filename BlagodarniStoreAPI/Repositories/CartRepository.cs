@@ -44,31 +44,34 @@ namespace BlagodarniStoreAPI.Repositories
 
         public void UpdateMy(int userId, List<Cart> carts)
         {
-            foreach (var cart in carts)
+            if (CartsBelongUser(userId,carts))
             {
-                if(_context.Carts.Any(x => x == cart))
+                carts = carts.GroupBy(x => x.ProductId).Select(group => 
+                    new Cart
+                    {
+                        UserId = group.First().UserId,
+                        ProductId = group.Key,
+                        Amount = group.Sum(cart => cart.Amount)
+                    })
+                    .ToList();
+
+                foreach (var cart in carts)
                 {
-                    _context.Carts.Update(cart);
+                    if(_context.Carts.Any(x => x == cart))
+                    {
+                        _context.Carts.Update(cart);
+                    }
+                    else
+                    {
+                        _context.Carts.Add(cart);
+                    }
                 }
-                else
-                {
-                    _context.Carts.Add(cart);
-                }
+                _context.SaveChanges();
             }
-            _context.SaveChanges();
-            /*foreach (var cart in carts) 
-            { 
-                _context.Carts.Update(cart);
+            else
+            {
+                throw new Exception($"Конфликт полей UserId и Cart.User.Id");
             }
-            _context.SaveChanges();*/
-            /* if(_context.Carts.Any(x => x.CustomerId == customerId && x.OrderId == null))
-             {
-                 foreach (var cart in carts)
-                 {
-                     _context.Carts.Update(cart);
-                 }
-                 _context.Carts.Attach
-             }*/
         }
 
         #endregion
@@ -76,6 +79,20 @@ namespace BlagodarniStoreAPI.Repositories
         #region DELETE
 
 
+
+        #endregion
+
+        #region TOOLMETHODS
+
+        private bool CartsBelongUser(int userId, List<Cart> carts)
+        {
+            foreach(var cart in carts)
+            {
+                if(cart.UserId != userId)
+                    return false;
+            }
+            return true;
+        }
 
         #endregion
     }

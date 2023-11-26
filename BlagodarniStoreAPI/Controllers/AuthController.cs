@@ -26,6 +26,12 @@ namespace BlagodarniStoreAPI.Controllers
 
         #region GET
 
+        /// <summary>
+        /// Проверка авторизации (Токен обяазателен)
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">Успешное выполнение</response>
+        /// <response code="400">Ошибка API</response>
         [HttpGet("IsAuth"), Authorize]
         public IActionResult IsAuth()
         {
@@ -110,18 +116,21 @@ namespace BlagodarniStoreAPI.Controllers
         }
 
         /// <summary>
-        /// Установка нового пароля
+        /// Установка нового пароля (Токен обязателен)
         /// </summary>
         /// <param name="phoneNumber">Номер телефона</param>
-        /// <param name="password">Пароль</param>
+        /// <param name="newPassword">Новый пароль</param>
         /// <returns></returns>
         /// <response code="200">Успешное выполнение</response>
         /// <response code="400">Ошибка API</response>
-        [HttpPost("SetNewPassword")]
-        public IActionResult SetNewPassword(string phoneNumber, string password)
-        {
-            bool result = _iAuthRepository.SetNewPassword(phoneNumber, password);
-            if (result) return Ok();
+        [HttpPost("SetNewPassword"), Authorize]
+        public IActionResult SetNewPassword(string phoneNumber, string newPassword)
+        { 
+            if (_iAuthRepository.SetNewPassword(
+                int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value),
+                phoneNumber, 
+                newPassword)) 
+                return Ok();
             else return BadRequest();
         }
 

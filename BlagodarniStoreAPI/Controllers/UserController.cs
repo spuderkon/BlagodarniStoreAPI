@@ -41,6 +41,12 @@ namespace BlagodarniStoreAPI.Controllers
             return _iUserRepository.GetMy(int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value))!;
         }
 
+        [HttpGet("GetCouriers"), Authorize(Roles = "admin")]
+        public ActionResult<IEnumerable<Cart>> GetCouriers()
+        {
+            return Ok(_iUserRepository.GetCouriers());
+        }
+
         #endregion
 
         #region POST

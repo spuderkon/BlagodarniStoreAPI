@@ -1,4 +1,5 @@
 ﻿using BlagodarniStoreAPI.Models;
+using BlagodarniStoreAPI.ModelsDTO;
 
 namespace BlagodarniStoreAPI.Interfaces
 {
@@ -6,6 +7,8 @@ namespace BlagodarniStoreAPI.Interfaces
     {
         List<Order> GetNotInDelivery();
 
-        Order CreateMy(int userId, Order order);
+        Order CreateMy(int userId, OrderDTO order);
+        void OrderPaid(int deliveryId, int courierId);
+        void OrderDelivered(int deliveryId, int courierId);
     }
 }

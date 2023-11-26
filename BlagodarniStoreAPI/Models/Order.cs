@@ -7,7 +7,7 @@ public partial class Order
 {
     public int Id { get; set; }
 
-    public int? UserId { get; set; }
+    public int UserId { get; set; }
 
     public DateTime? OrderDate { get; set; }
 
@@ -23,9 +23,9 @@ public partial class Order
 
     public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
 
-    public virtual Delivery? Delivery { get; set; }
+    public virtual ICollection<Delivery> Deliveries { get; set; } = new List<Delivery>();
 
-    public virtual PaymentMethod? PaymentMethod { get; set; } = null!;
+    public virtual PaymentMethod PaymentMethod { get; set; } = null!;
 
-    public virtual OrderStatus? Status { get; set; }
+    public virtual OrderStatus Status { get; set; } = null!;
 }

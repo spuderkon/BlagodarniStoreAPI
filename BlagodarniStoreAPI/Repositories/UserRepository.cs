@@ -22,10 +22,16 @@ namespace BlagodarniStoreAPI.Repositories
             return LoadData(user).FirstOrDefault();
         }
 
+
         public User? GetMy(int id)
         {
             var user = _context.Users.Where(x => x.Id == id);
             return LoadData(user).FirstOrDefault();
+        }
+        public List<User> GetCouriers()
+        {
+            var users = _context.Users.Where(x => x.RoleId == 2);
+            return LoadData(users).ToList();
         }
 
         private IQueryable<User> LoadData(IQueryable<User> users)
