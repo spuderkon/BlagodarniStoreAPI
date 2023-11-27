@@ -43,7 +43,12 @@ namespace BlagodarniStoreAPI.Repositories
 
         #region POST
 
-
+        public User Add(User user)
+        {
+            _context.Users.Add(user);
+            _context.SaveChanges();
+            return user;
+        }
 
         #endregion
 

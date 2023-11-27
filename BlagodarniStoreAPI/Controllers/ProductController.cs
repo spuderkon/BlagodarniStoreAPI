@@ -70,7 +70,7 @@ namespace BlagodarniStoreAPI.Controllers
         ///     }
         ///
         /// </remarks>
-        /// <param name="product">Product</param>
+        /// <param name="product">Продукт</param>
         /// <returns></returns>
         /// <response code="200">Успешное выполнение</response>
         /// <response code="400">Ошибка API</response>

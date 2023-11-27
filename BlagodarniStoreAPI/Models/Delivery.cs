@@ -14,7 +14,7 @@ public partial class Delivery
     public int UserId { get; set; }
 
     public DateTime DateArrive {  get; set; }
-    public virtual Order Order { get; set; } = null!;
+    public virtual Order? Order { get; set; } = null!;
 
     public virtual User? User { get; set; }
 }

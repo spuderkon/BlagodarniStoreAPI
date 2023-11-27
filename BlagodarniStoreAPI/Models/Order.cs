@@ -25,7 +25,7 @@ public partial class Order
 
     public virtual ICollection<Delivery> Deliveries { get; set; } = new List<Delivery>();
 
-    public virtual PaymentMethod PaymentMethod { get; set; } = null!;
+    public virtual PaymentMethod? PaymentMethod { get; set; }
 
-    public virtual OrderStatus Status { get; set; } = null!;
+    public virtual OrderStatus? Status { get; set; }    
 }
