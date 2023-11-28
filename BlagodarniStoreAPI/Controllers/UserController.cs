@@ -32,19 +32,19 @@ namespace BlagodarniStoreAPI.Controllers
         [HttpGet("Get/{id}")]
         public ActionResult<User> Get(int id)
         {
-            return _iUserRepository.Get(id);
+            return Ok(_iUserRepository.Get(id));
         }
 
         [HttpGet("GetMy"), Authorize]
-        public ActionResult<User> Get() 
+        public ActionResult<User> GetMy() 
         { 
-            return _iUserRepository.GetMy(int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value))!;
+            return _iUserRepository.GetMy(int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
         }
 
         [HttpGet("GetCouriers"), Authorize(Roles = "admin")]
         public ActionResult<IEnumerable<User>> GetCouriers()
         {
-            return _iUserRepository.GetCouriers();
+            return Ok(_iUserRepository.GetCouriers());
         }
 
         #endregion
@@ -63,7 +63,7 @@ namespace BlagodarniStoreAPI.Controllers
         ///        "Lastname": string,
         ///        "Email": string,
         ///        "PhoneNumber": string(MAX_LENGTH(11)),
-        ///        "RoleId": int
+        ///        "RoleId": int,
         ///        "Password": string,
         ///        "Address": string
         ///     }

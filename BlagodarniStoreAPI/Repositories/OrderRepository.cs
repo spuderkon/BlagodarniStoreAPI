@@ -9,11 +9,13 @@ namespace BlagodarniStoreAPI.Repositories
     {
         MeatStoreContext _context;
         ICartRepository _iCartRepository;
+        IUserAddressRepository _iUserAddressRepository;
 
-        public OrderRepository(MeatStoreContext context, ICartRepository iCartRepository)
+        public OrderRepository(MeatStoreContext context, ICartRepository iCartRepository, IUserAddressRepository iUserAddressRepository)
         {
             _context = context;
             _iCartRepository = iCartRepository;
+            _iUserAddressRepository = iUserAddressRepository;
         }
 
         #region GET
@@ -45,24 +47,33 @@ namespace BlagodarniStoreAPI.Repositories
                 {
                     throw new Exception($"Конфликт полей {order.PaymentMethodId} и {order.Paid}") ;
                 }
-                Order newOrder = new Order
+                else
                 {
-                    UserId = userId,
-                    OrderDate = DateTime.Now,
-                    StatusId = 1,
-                    TotalPrice = carts.Sum(x => x.Product!.Price * x.Amount),
-                    PaymentMethodId = order.PaymentMethodId,
-                    Paid = order.Paid,
-                    Address = order.Address,
-                };
-                _context.Orders.Add(newOrder);
-                _context.SaveChanges();
-                carts.ToList().ForEach(x => x.OrderId = newOrder.Id);
-                _iCartRepository.UpdateMy(carts.ToList(), userId);
-                return newOrder;
+                    Order newOrder = new Order
+                    {
+                        UserId = userId,
+                        OrderDate = DateTime.Now,
+                        StatusId = 1,
+                        TotalPrice = carts.Sum(x => x.Product!.Price * x.Amount),
+                        PaymentMethodId = order.PaymentMethodId,
+                        Paid = order.Paid,
+                        Address = order.Address,
+                    };
+                    _context.Orders.Add(newOrder);
+                    _context.SaveChanges();
+                    carts.ToList().ForEach(x => x.OrderId = newOrder.Id);
+                    _iCartRepository.UpdateMy(carts.ToList(), userId);
+                    if(UserAddressDoesntExist(newOrder.Address))
+                    {
+                        _iUserAddressRepository.Add(order.Address,userId);
+                    }
+                    return newOrder;
+                }
             }
-
-            throw new Exception("Корзина пуста");
+            else
+            {
+                throw new Exception("Корзина пуста");
+            }
         }
 
         #endregion
@@ -136,36 +147,14 @@ namespace BlagodarniStoreAPI.Repositories
 
         #region TOOLMETHODS
 
-
+        public bool UserAddressDoesntExist(string address)
+        {
+            if(_context.UserAddresses.FirstOrDefault(x => x.Address == address) == null)
+                return true;
+            return false;
+        }
 
         #endregion
 
-        /*
-         
-        public void OrderTaken(int deliveryId, int courierId)
-        {
-            var delivery = _context.Deliveries.FirstOrDefault(x => x.Id == deliveryId);
-            if (delivery is not null)
-            {
-                if (delivery.UserId == courierId)
-                {
-                    var order = _context.Orders.FirstOrDefault(x => x.Id == delivery.OrderId)!;
-                    order.StatusId = 3;
-                    _context.Orders.Update(order);
-                    _context.Deliveries.Update(delivery);
-                    _context.SaveChanges();
-                }
-                else
-                {
-                    throw new Exception("Заказ не принадлежит вам");
-                }
-            }
-            else
-            {
-                throw new Exception("Такого заказа не существует");
-            }
-        } 
-
-         */
     }
 }

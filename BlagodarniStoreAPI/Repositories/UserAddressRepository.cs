@@ -16,7 +16,7 @@ namespace BlagodarniStoreAPI.Repositories
         #region GET
         public List<UserAddress>? GetUserAddresses(int id)
         {
-                return LoadData(_context.UserAddresses.Where(x => x.UserId == id)).ToList();
+            return LoadData(_context.UserAddresses.Where(x => x.UserId == id)).ToList();
         }
 
         private IQueryable<UserAddress> LoadData(IQueryable<UserAddress> userAddresses)
