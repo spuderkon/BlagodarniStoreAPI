@@ -65,7 +65,7 @@ namespace BlagodarniStoreAPI.Repositories
                     _iCartRepository.UpdateMy(carts.ToList(), userId);
                     if(UserAddressDoesntExist(newOrder.Address))
                     {
-                        _iUserAddressRepository.Add(order.Address,userId);
+                        _iUserAddressRepository.Add(userId,order.Address);
                     }
                     return newOrder;
                 }
