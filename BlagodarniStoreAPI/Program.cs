@@ -1,6 +1,7 @@
 using BlagodarniStoreAPI.Interfaces;
 using BlagodarniStoreAPI.Models;
 using BlagodarniStoreAPI.Repositories;
+using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration.UserSecrets;
@@ -92,6 +93,10 @@ builder.Services.AddTransient<IUnitRepository, UnitRepository>();
 builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
 builder.Services.AddTransient<IOrderRepository, OrderRepository>();
 builder.Services.AddTransient<IDeliveryRepository, DeliveryRepository>();
+
+builder.Services.AddAuthentication(
+        CertificateAuthenticationDefaults.AuthenticationScheme)
+    .AddCertificate();
 
 var app = builder.Build();
 
