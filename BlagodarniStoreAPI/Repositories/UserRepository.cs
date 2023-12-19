@@ -20,9 +20,10 @@ namespace BlagodarniStoreAPI.Repositories
 
         #region GET
 
-        public User? Get(int id)
+        public async Task<User?> Get(int id)
         {
-            return LoadData(_context.Users.Where(x => x.Id == id)).FirstOrDefault();
+            var user = await Task.Run(() => LoadData(_context.Users.Where(x => x.Id == id)).FirstOrDefault());
+            return user;
         }
 
 

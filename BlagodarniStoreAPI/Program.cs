@@ -40,45 +40,6 @@ builder.Services.AddSwaggerGen(options =>
 
     var xmlPath = Path.Combine(basePath, "BlagodarniStoreAPI.xml");
     options.IncludeXmlComments(xmlPath);
-    /* options.SwaggerDoc("v1", new OpenApiInfo
-     {
-         Version = "v1",
-         Title = "Shop API",
-         Description = "Пример ASP .NET Core Web API",
-         Contact = new OpenApiContact
-         {
-             Name = "Пример контакта",
-             Url = new Uri("https://example.com/contact")
-         },
-         License = new OpenApiLicense
-         {
-             Name = "Пример лицензии",
-             Url = new Uri("https://example.com/license")
-         }
-     });*/
-    /*options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Description = @"Введите JWT токен авторизации.",
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        BearerFormat = "JWT",
-        Scheme = "Bearer"
-    });
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement()
-    {
-        {
-          new OpenApiSecurityScheme
-          {
-            Reference = new OpenApiReference
-            {
-                Type = ReferenceType.SecurityScheme,
-                Id = "Bearer"
-            },
-          },
-          new List<string>()
-        }
-    });*/
 });
 
 string connection = builder.Configuration.GetConnectionString("MeatStore")!;
@@ -94,9 +55,6 @@ builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
 builder.Services.AddTransient<IOrderRepository, OrderRepository>();
 builder.Services.AddTransient<IDeliveryRepository, DeliveryRepository>();
 
-builder.Services.AddAuthentication(
-        CertificateAuthenticationDefaults.AuthenticationScheme)
-    .AddCertificate();
 
 var app = builder.Build();
 
@@ -119,7 +77,7 @@ if (app.Environment.IsDevelopment())
  */
 
 app.UseCors(opt => { opt.AllowAnyHeader(); opt.AllowAnyOrigin(); opt.AllowAnyMethod(); });
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();

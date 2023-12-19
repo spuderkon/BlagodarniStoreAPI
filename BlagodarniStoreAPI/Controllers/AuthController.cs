@@ -37,6 +37,11 @@ namespace BlagodarniStoreAPI.Controllers
         {
             return Ok();
         }
+        /*[HttpGet("Test")]
+        public IActionResult Test()
+        {
+            return Ok("qwe");
+        }*/
 
         #endregion
 

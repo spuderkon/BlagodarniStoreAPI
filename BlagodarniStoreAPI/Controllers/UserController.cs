@@ -30,9 +30,10 @@ namespace BlagodarniStoreAPI.Controllers
         /// <response code="200">Успешное выполнение</response>
         /// <response code="400">Ошибка API</response>
         [HttpGet("Get/{id}")]
-        public ActionResult<User> Get(int id)
+        public async Task<ActionResult<User>> Get(int id)
         {
-            return Ok(_iUserRepository.Get(id));
+            var user = await _iUserRepository.Get(id);
+            return Ok(user);
         }
 
         [HttpGet("GetMy"), Authorize]
