@@ -23,25 +23,37 @@ namespace BlagodarniStoreAPI.Controllers
         #region GET
 
         /// <summary>
-        /// Получить пользователя по Id
+        /// Получить пользователя по Id (Токен обязателен, Админ)
         /// </summary>
         /// <param name="id">Id пользователя</param>
         /// <returns></returns>
         /// <response code="200">Успешное выполнение</response>
         /// <response code="400">Ошибка API</response>
-        [HttpGet("Get/{id}")]
+        [HttpGet("Get/{id}"), Authorize]
         public async Task<ActionResult<User>> Get(int id)
         {
             var user = await _iUserRepository.Get(id);
             return Ok(user);
         }
 
+        /// <summary>
+        /// Получить информацию о себе(Токен обязателен)
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">Успешное выполнение</response>
+        /// <response code="400">Ошибка API</response>
         [HttpGet("GetMy"), Authorize]
         public ActionResult<User> GetMy() 
         { 
             return _iUserRepository.GetMy(int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
         }
 
+        /// <summary>
+        /// Получить всех курьеров (Токен обязателен, Админ)
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">Успешное выполнение</response>
+        /// <response code="400">Ошибка API</response>
         [HttpGet("GetCouriers"), Authorize(Roles = "admin")]
         public ActionResult<IEnumerable<User>> GetCouriers()
         {
