@@ -65,7 +65,7 @@ namespace BlagodarniStoreAPI.Controllers
         #region POST
 
         /// <summary>
-        /// Добавить пользователя (Токен обязателен, админ)
+        /// Добавить пользователя (Токен обязателен, Админ)
         /// </summary>
         /// <remarks>
         /// Пример запроса:

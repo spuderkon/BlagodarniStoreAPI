@@ -42,11 +42,13 @@ namespace BlagodarniStoreAPI.Repositories
 
         #region UPDATE
 
-        public void UpdateMy(List<Cart> carts,int userId)
+        public void UpdateMy(List<Cart> newCarts,int userId)
         {
-            if (CartsBelongUser(userId,carts))
+            if (CartsBelongUser(userId, newCarts))
             {
-                carts = carts.GroupBy(x => x.ProductId).Select(group => 
+                var dataBaseCarts = _context.Carts.Where(x => x.UserId == userId && x.OrderId == null).ToList();
+                var cartsToDelete = dataBaseCarts.ExceptBy(newCarts.Select(x => x.ProductId), x=> x.ProductId).ToList();
+                newCarts = newCarts.GroupBy(x => x.ProductId).Select(group =>
                     new Cart
                     {
                         UserId = group.First().UserId,
@@ -54,18 +56,21 @@ namespace BlagodarniStoreAPI.Repositories
                         Amount = group.Sum(cart => cart.Amount)
                     })
                     .ToList();
-
-                foreach (var cart in carts)
+                foreach (var cart in newCarts) 
                 {
-                    if(_context.Carts.Any(x => x == cart))
-                    {
-                        _context.Carts.Update(cart);
-                    }
-                    else
+                    var existingCart = _context.Carts.FirstOrDefault(x => x.UserId == userId && x.ProductId == cart.ProductId && x.OrderId == null);
+
+                    if(existingCart == null)
                     {
                         _context.Carts.Add(cart);
                     }
+                    else
+                    {
+                        existingCart.Amount = cart.Amount;
+                        _context.Carts.Update(existingCart);
+                    }
                 }
+                _context.Carts.RemoveRange(cartsToDelete);
                 _context.SaveChanges();
             }
             else
