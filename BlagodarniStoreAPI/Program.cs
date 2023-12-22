@@ -65,16 +65,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-/*
- 
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-            optionsBuilder.UseSqlServer("Name=ConnectionStrings:MeatStore");
-        }
-    }
- 
- */
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseCors(opt => { opt.AllowAnyHeader(); opt.AllowAnyOrigin(); opt.AllowAnyMethod(); });
 //app.UseHttpsRedirection();

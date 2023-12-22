@@ -47,7 +47,6 @@ namespace BlagodarniStoreAPI.Repositories
             if (CartsBelongUser(userId, newCarts))
             {
                 var dataBaseCarts = _context.Carts.Where(x => x.UserId == userId && x.OrderId == null).ToList();
-                var cartsToDelete = dataBaseCarts.ExceptBy(newCarts.Select(x => x.ProductId), x=> x.ProductId).ToList();
                 newCarts = newCarts.GroupBy(x => x.ProductId).Select(group =>
                     new Cart
                     {
@@ -56,6 +55,7 @@ namespace BlagodarniStoreAPI.Repositories
                         Amount = group.Sum(cart => cart.Amount)
                     })
                     .ToList();
+                var cartsToDelete = dataBaseCarts.ExceptBy(newCarts.Select(x => x.ProductId), x=> x.ProductId).ToList();
                 foreach (var cart in newCarts) 
                 {
                     var existingCart = _context.Carts.FirstOrDefault(x => x.UserId == userId && x.ProductId == cart.ProductId && x.OrderId == null);

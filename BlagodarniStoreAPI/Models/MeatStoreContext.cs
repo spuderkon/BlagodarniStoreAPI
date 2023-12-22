@@ -41,7 +41,10 @@ public partial class MeatStoreContext : DbContext
     {
         if (!optionsBuilder.IsConfigured)
         {
-            optionsBuilder.UseSqlServer("Name=ConnectionStrings:MeatStore");
+            optionsBuilder.UseSqlServer("Name=ConnectionStrings:MeatStore",
+                builder => builder.EnableRetryOnFailure()
+            );
+
         }
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)

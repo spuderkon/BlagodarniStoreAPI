@@ -1,0 +1,39 @@
+# version: "3.8"
+# services:
+#   web_api:
+#     image: blagodarnistoreapi
+#     container_name: blagodarnistoreapi_application
+#     ports:
+#       - "5073:80"
+#   sql:
+#     image: "mcr.microsoft.com/mssql/server:2022-latest"
+#     container_name: sql_server
+#     ports:
+#       - "1433:1433" 
+#     environment:
+#       - ACCEPT_EULA=y
+#       - MSSQL_SA_PASSWORD=ZEtk4SxexjyoTMK!
+version: "3.9"
+
+services:
+
+  sql_server:
+   image: "mcr.microsoft.com/mssql/server:2022-latest"
+   container_name: sql_server
+   environment:
+    - MSSQL_SA_PASSWORD=ZEtk4SxexjyoTMK!
+    - ACCEPT_EULA=Y
+   ports:
+    - "1433:1433" 
+
+  blagodarnistoreapi:
+    image: blagodarnistoreapi
+    container_name: blagodarnistoreapi_application
+    ports:
+      - "5073:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ConnectionString=Server=sql_server;Database=MeatStore;User=sa;Password=ZEtk4SxexjyoTMK!;TrustServerCertificate=true;Encrypt=true
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
