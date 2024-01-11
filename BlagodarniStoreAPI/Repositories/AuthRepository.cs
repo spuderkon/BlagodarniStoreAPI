@@ -3,21 +3,43 @@ using BlagodarniStoreAPI.Models;
 using BlagodarniStoreAPI.ModelsDTO;
 using BlagodarniStoreAPI.Tools;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
+using System.Security.Claims;
 
 namespace BlagodarniStoreAPI.Repositories
 {
     public class AuthRepository : IAuthRepository
     {
-        MeatStoreContext _context;
+        private readonly MeatStoreContext _context;
         Random _random;
-        IUserAddressRepository _userAddressRepository;
+        private readonly IUserRepository _iUserRepository;
+        private readonly IUserAddressRepository _userAddressRepository;
+        private readonly IConfiguration _iConfiguration;
 
-        public AuthRepository(MeatStoreContext context, IUserAddressRepository userAddressRepository)
+        public AuthRepository(MeatStoreContext context, IUserRepository iUserRepository, IUserAddressRepository userAddressRepository, IConfiguration iConfiguration)
         {
             _context = context;
             _random = new Random();
+            _iUserRepository = iUserRepository;
             _userAddressRepository = userAddressRepository;
+            _iConfiguration = iConfiguration;
+        }
+
+        public string? Authorize(string phoneNumber, string password)
+        {
+            var user = ValidUser(phoneNumber, password);
+            if (user is not null)
+            {
+                var identity = new ClaimsIdentity(new[] {
+                        new Claim("phoneNumber", user.PhoneNumber),
+                        new Claim(ClaimTypes.Role, user.Role.Name),
+                        new Claim("id",user.Id.ToString()) });
+
+                return JwtTools.GenerateJwtToken(identity, _iConfiguration["JwtSettings:Key"]!, _iConfiguration["JwtSettings:Issuer"]!, _iConfiguration["JwtSettings:Audience"]!);
+            }
+            return null;
+
         }
 
         public User? ValidUser(string phoneNumber, string password)
@@ -36,31 +58,24 @@ namespace BlagodarniStoreAPI.Repositories
         }
 
         #region POST
-        public User? Register(User user) 
+
+        public string? Register(User user)
         {
-            if (PhoneNumberAlreadyExist(user.PhoneNumber)) 
+            if (PhoneNumberAlreadyExist(user.PhoneNumber))
             {
-                throw new Exception("Пользователь с заданным номер телефона уже существует");
+                throw new Exception("Пользователь с заданным номером телефона уже существует");
             }
+
             string salt = RegistrationTools.GetRandomKey(_random.Next(128, 256));
             string pass = RegistrationTools.GetPasswordSha256(user.Password, salt);
-            var creatingUser = new User
-            {
-                Name = user.Name,
-                Surname = user.Surname,
-                Lastname = user.Lastname,
-                Email = user.Email,
-                PhoneNumber = user.PhoneNumber,
-                RoleId = 3,
-                Password = pass,
-                PasswordSalt = salt,
-                Address = user.Address,
-            };
-            _context.Users.Add(creatingUser);
+            string oldPass = user.Password;
+            user.RoleId = 3;
+            user.Password = pass;
+            user.PasswordSalt = salt;
+            _context.Users.Add(user);
             _context.SaveChanges();
-            _userAddressRepository.Add(creatingUser.Id, user.Address);
-            var newUser = _context.Users.Include(x => x.Role).Where(x => x.Id == creatingUser.Id).FirstOrDefault();
-            return newUser;
+            _userAddressRepository.Add(user.Id, user.Address);
+            return Authorize(user.PhoneNumber, oldPass);
         }
 
         #endregion
@@ -71,9 +86,9 @@ namespace BlagodarniStoreAPI.Repositories
             var user = _context.Users.FirstOrDefault(x => x.PhoneNumber == phoneNumber);
             if (user is not null)
             {
-                if(userId != user.Id)
+                if (userId != user.Id)
                 {
-                    throw new Exception("Id не совпадаю");
+                    throw new Exception("Id не совпадают");
                 }
                 string salt = RegistrationTools.GetRandomKey(_random.Next(128, 256));
                 string pass = RegistrationTools.GetPasswordSha256(password, salt);
@@ -94,5 +109,7 @@ namespace BlagodarniStoreAPI.Repositories
                 return false;
             return true;
         }
+
+
     }
 }

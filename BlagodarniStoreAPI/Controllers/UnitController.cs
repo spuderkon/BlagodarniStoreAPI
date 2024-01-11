@@ -29,7 +29,7 @@ namespace BlagodarniStoreAPI.Controllers
         [HttpGet("GetAll"), Authorize(Roles = "admin")]
         public ActionResult<IEnumerable<Unit>> GetAll()
         {
-            return _iUnitRepository.GetAll();
+            return Ok(_iUnitRepository.GetAll());
         }
 
         #endregion

@@ -28,7 +28,7 @@ namespace BlagodarniStoreAPI.Controllers
         [HttpGet("GetAll"), Authorize]
         public ActionResult<IEnumerable<Category>> GetAll()
         {
-            return _iCategoryRepository.GetAll();
+            return Ok(_iCategoryRepository.GetAll());
         }
 
         #endregion

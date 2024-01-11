@@ -30,7 +30,7 @@ namespace BlagodarniStoreAPI.Controllers
         [HttpGet("GetMy"), Authorize]
         public ActionResult<IEnumerable<Cart>> GetMy() 
         {
-            return _iCartRepository.GetMy(int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
+            return Ok(_iCartRepository.GetMy(int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value)));
         }
 
         #endregion

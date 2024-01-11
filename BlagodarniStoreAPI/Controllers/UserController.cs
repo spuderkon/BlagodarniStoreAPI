@@ -32,8 +32,7 @@ namespace BlagodarniStoreAPI.Controllers
         [HttpGet("Get/{id}"), Authorize]
         public async Task<ActionResult<User>> Get(int id)
         {
-            var user = await _iUserRepository.Get(id);
-            return Ok(user);
+            return Ok(_iUserRepository.Get(id));
         }
 
         /// <summary>

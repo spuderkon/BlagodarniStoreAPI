@@ -5,8 +5,9 @@ namespace BlagodarniStoreAPI.Interfaces
 {
     public interface IAuthRepository
     {
-        public User? ValidUser(string phoneNumber, string password);
-        public User? Register(User user);
-        public bool SetNewPassword(string phoneNumber, string password, int userId);
+        string? Authorize(string phoneNumber, string password);
+        User? ValidUser(string phoneNumber, string password);
+        string? Register(User user);
+        bool SetNewPassword(string phoneNumber, string password, int userId);
     }
 }

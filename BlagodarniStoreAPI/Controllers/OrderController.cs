@@ -34,7 +34,7 @@ namespace BlagodarniStoreAPI.Controllers
         [HttpGet("GetNotInDelivery"),Authorize(Roles = "admin")]
         public ActionResult<IEnumerable<Order>> GetNotInDelivery()
         {
-            return _iOrderRepository.GetNotInDelivery();
+            return Ok(_iOrderRepository.GetNotInDelivery());
         }
 
         #endregion

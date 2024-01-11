@@ -58,25 +58,12 @@ namespace BlagodarniStoreAPI.Controllers
         [HttpPost("Authorize")]
         public IActionResult Authorize(string phoneNumber, string password)
         {
-            try
+            var token = _iAuthRepository.Authorize(phoneNumber, password);
+            if (token is not null)
             {
-                User? user = _iAuthRepository.ValidUser(phoneNumber, password);
-                if (user is not null)
-                {
-                    var identity = new ClaimsIdentity(new[] {
-                    new Claim(ClaimTypes.MobilePhone, user.PhoneNumber),
-                    new Claim(ClaimTypes.Role, user.Role.Name),
-                    new Claim("Id",user.Id.ToString())
-                });
-                    string Token = JwtTools.GenerateJwtToken(identity, _iConfiguration["JwtSettings:Key"]!, _iConfiguration["JwtSettings:Issuer"]!, _iConfiguration["JwtSettings:Audience"]!);
-                return Ok(Token);
-                }
-                return Unauthorized();
+                return Ok(token);
             }
-            catch (Exception ex)
-            {
-                return BadRequest(ErrorTools.GetInfo(ex));
-            }
+            return Unauthorized();
         }
 
         /// <summary>
@@ -105,14 +92,8 @@ namespace BlagodarniStoreAPI.Controllers
         {
             try
             {
-                User newUser = _iAuthRepository.Register(user)!;
-                var identity = new ClaimsIdentity(new[] {
-                    new Claim(ClaimTypes.MobilePhone, newUser.PhoneNumber),
-                    new Claim(ClaimTypes.Role, newUser.Role!.Name),
-                    new Claim("Id",newUser.Id.ToString())
-                });
-                string Token = JwtTools.GenerateJwtToken(identity, _iConfiguration["JwtSettings:Key"]!, _iConfiguration["JwtSettings:Issuer"]!, _iConfiguration["JwtSettings:Audience"]!);
-                return Ok( Token );
+                string token = _iAuthRepository.Register(user)!;
+                return Ok(token);
             }
             catch (Exception ex)
             {

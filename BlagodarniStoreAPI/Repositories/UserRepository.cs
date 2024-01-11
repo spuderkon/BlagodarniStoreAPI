@@ -20,10 +20,9 @@ namespace BlagodarniStoreAPI.Repositories
 
         #region GET
 
-        public async Task<User?> Get(int id)
+        public User? Get(int id)
         {
-            var user = await Task.Run(() => LoadData(_context.Users.Where(x => x.Id == id)).FirstOrDefault());
-            return user;
+            return LoadData(_context.Users.Where(x => x.Id == id)).FirstOrDefault(); ;
         }
 
 
@@ -95,6 +94,15 @@ namespace BlagodarniStoreAPI.Repositories
             var user = _context.Users.FirstOrDefault(x => x.PhoneNumber == phoneNumber);
             if (user is null)
                 return false;
+            return true;
+        }
+
+        public bool UserValid(User user)
+        {
+            if (user.Name is not String)
+            {
+                return false;
+            }
             return true;
         }
 

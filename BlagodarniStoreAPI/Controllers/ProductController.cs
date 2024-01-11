@@ -34,7 +34,7 @@ namespace BlagodarniStoreAPI.Controllers
         [HttpGet("GetAll")]
         public ActionResult<IEnumerable<Product>> GetAll()
         {
-            return _iProductRepository.GetAll();
+            return Ok(_iProductRepository.GetAll());
         }
 
         /// <summary>

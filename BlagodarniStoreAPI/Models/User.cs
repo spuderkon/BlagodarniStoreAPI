@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace BlagodarniStoreAPI.Models;
 
 public partial class User
 {
     public int Id { get; set; }
-
+    [StringLength(30)]
     public string Name { get; set; } = null!;
 
     public string Surname { get; set; } = null!;
