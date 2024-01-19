@@ -1,6 +1,7 @@
 ﻿using BlagodarniStoreAPI.Interfaces;
 using BlagodarniStoreAPI.Models;
 using BlagodarniStoreAPI.ModelsDTO;
+using BlagodarniStoreAPI.ModelsDTO.POST;
 using BlagodarniStoreAPI.Repositories;
 using BlagodarniStoreAPI.Tools;
 using Microsoft.AspNetCore.Authorization;
@@ -15,15 +16,37 @@ namespace BlagodarniStoreAPI.Controllers
     public class OrderController : ControllerBase
     {
         IOrderRepository _iOrderRepository;
-        MeatStoreContext _context;
 
         public OrderController(IOrderRepository iOrderRepository, MeatStoreContext context)
         {
             _iOrderRepository = iOrderRepository;
-            _context = context;
         }
 
         #region GET
+
+        /// <summary>
+        /// Получить мои все актуальные заказы (Токен обязателен)
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">Успешное выполнение</response>
+        /// <response code="400">Ошибка API</response>
+        [HttpGet("GetMyAllActual"), Authorize]
+        public ActionResult<IEnumerable<Order>> GetMyActual()
+        {
+            return Ok(_iOrderRepository.GetMyActual(int.Parse(HttpContext.User.Claims.First(x => x.Type == "id").Value)));
+        }
+
+        /// <summary>
+        /// Получить мои все доставленные заказы (Токен обязателен)
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">Успешное выполнение</response>
+        /// <response code="400">Ошибка API</response>
+        [HttpGet("GetMyAllDelivered"), Authorize]
+        public ActionResult<IEnumerable<Order>> GetMyDelivered()
+        {
+            return Ok(_iOrderRepository.GetMyDelivered(int.Parse(HttpContext.User.Claims.First(x => x.Type == "id").Value)));
+        }
 
         /// <summary>
         /// Получить все заказы не назначенные на доставку (Токен обязателен, Админ)
@@ -37,6 +60,7 @@ namespace BlagodarniStoreAPI.Controllers
             return Ok(_iOrderRepository.GetNotInDelivery());
         }
 
+
         #endregion
 
         #region POST
@@ -49,7 +73,6 @@ namespace BlagodarniStoreAPI.Controllers
         ///     
         ///     {
         ///        "PaymentMethodId": int,
-        ///        "Paid": bool,
         ///        "Address": string,
         ///     }
         ///
@@ -59,11 +82,11 @@ namespace BlagodarniStoreAPI.Controllers
         /// <response code="200">Успешное выполнение</response>
         /// <response code="400">Ошибка API</response>
         [HttpPost("CreateMy"), Authorize]
-        public IActionResult CreateMy([FromBody] Order order)
+        public IActionResult CreateMy([FromBody] CreateOrderDTO order)
         {
             try
             {
-                return Ok(_iOrderRepository.CreateMy(order, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value)));
+                return Ok(_iOrderRepository.CreateMy(order, int.Parse(HttpContext.User.Claims.First(x => x.Type == "id").Value)));
             }
             catch (Exception ex) 
             {
@@ -87,7 +110,7 @@ namespace BlagodarniStoreAPI.Controllers
         {
             try
             {
-                _iOrderRepository.OrderPaid(id, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
+                _iOrderRepository.OrderPaid(id, int.Parse(HttpContext.User.Claims.First(x => x.Type == "id").Value));
                 return Ok();
             }
             catch (Exception ex)

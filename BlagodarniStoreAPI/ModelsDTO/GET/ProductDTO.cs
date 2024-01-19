@@ -1,7 +1,7 @@
 ﻿using BlagodarniStoreAPI.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace BlagodarniStoreAPI.ModelsDTO
+namespace BlagodarniStoreAPI.ModelsDTO.GET
 {
     public class ProductDTO : Product
     {
@@ -15,14 +15,10 @@ namespace BlagodarniStoreAPI.ModelsDTO
             UnitId = product.UnitId;
             Price = product.Price;
         }
-        [Key]
         new public int Id { get; set; }
-        [StringLength(30)]
         new public string Name { get; set; } = null!;
         new public int CategoryId { get; set; }
-        [StringLength(30)]
         new public string Description { get; set; } = null!;
-        [StringLength(300)]
         new public string Image { get; set; } = null!;
         new public int UnitId { get; set; }
         new public decimal Price { get; set; }

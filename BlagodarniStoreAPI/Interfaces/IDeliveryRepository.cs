@@ -1,4 +1,5 @@
 ﻿using BlagodarniStoreAPI.Models;
+using BlagodarniStoreAPI.ModelsDTO.POST;
 
 namespace BlagodarniStoreAPI.Interfaces
 {
@@ -6,6 +7,6 @@ namespace BlagodarniStoreAPI.Interfaces
     {
         List<Delivery> GetMyAllActive(int userId);
         Delivery? Get(int id, int userId);
-        Delivery AssignCourier(Delivery delivery);
+        Delivery AssignCourier(CreateDeliveryDTO delivery);
     }
 }

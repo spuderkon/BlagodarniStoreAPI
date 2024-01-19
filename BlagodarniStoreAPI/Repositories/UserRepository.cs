@@ -1,6 +1,6 @@
 ﻿using BlagodarniStoreAPI.Interfaces;
 using BlagodarniStoreAPI.Models;
-using BlagodarniStoreAPI.ModelsDTO;
+using BlagodarniStoreAPI.ModelsDTO.GET;
 using BlagodarniStoreAPI.Tools;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -40,12 +40,13 @@ namespace BlagodarniStoreAPI.Repositories
             return users
                   .Select(x => new UserDTO(x)
                   {
-                      Role = new RoleDTO(x.Role!)
+                      Role = new RoleDTO(x.Role!),
+                      Address = new UserAddressDTO(x.Address),
                   });
         }
         #endregion
 
-        #region POST
+        #region ADD
 
         public User Add(User user)
         {
@@ -75,9 +76,15 @@ namespace BlagodarniStoreAPI.Repositories
 
         #endregion
 
-        #region PUT
+        #region UPDATE
 
-
+        public void UpdateUserAddress(int userId, int addressId)
+        {
+            User user = _context.Users.First(x => x.Id == userId);
+            user.AddressId = addressId;
+            _context.Users.Update(user);
+            _context.SaveChanges();
+        }
 
         #endregion
 

@@ -1,12 +1,12 @@
 ﻿using BlagodarniStoreAPI.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace BlagodarniStoreAPI.ModelsDTO
+namespace BlagodarniStoreAPI.ModelsDTO.GET
 {
     public class PaymentMethodDTO : PaymentMethod
     {
-        public PaymentMethodDTO(PaymentMethod paymentMethod) 
-        { 
+        public PaymentMethodDTO(PaymentMethod paymentMethod)
+        {
             Id = paymentMethod.Id;
             Name = paymentMethod.Name;
         }

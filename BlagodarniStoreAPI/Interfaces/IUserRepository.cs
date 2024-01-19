@@ -9,5 +9,6 @@ namespace BlagodarniStoreAPI.Interfaces
         List<User> GetCouriers();
         User Add(User user);
         bool UserValid(User user);
+        void UpdateUserAddress(int userId, int addressId);
     }
 }

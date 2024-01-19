@@ -1,5 +1,6 @@
 ﻿using BlagodarniStoreAPI.Interfaces;
 using BlagodarniStoreAPI.Models;
+using BlagodarniStoreAPI.ModelsDTO.POST;
 using BlagodarniStoreAPI.Tools;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -30,7 +31,7 @@ namespace BlagodarniStoreAPI.Controllers
         [HttpGet("Get/{id}"), Authorize(Roles = "courier")]
         public ActionResult Get(int id)
         {
-            return Ok(_iDeliveryRepository.Get(id, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value)));
+            return Ok(_iDeliveryRepository.Get(id, int.Parse(HttpContext.User.Claims.First(x => x.Type == "id").Value)));
         }
 
         /// <summary>
@@ -42,7 +43,7 @@ namespace BlagodarniStoreAPI.Controllers
         [HttpGet("GetMyAllActive"), Authorize(Roles = "courier")]
         public ActionResult<IEnumerable<Delivery>> GetMyAllActive()
         {
-            return Ok(_iDeliveryRepository.GetMyAllActive(int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value)));
+            return Ok(_iDeliveryRepository.GetMyAllActive(int.Parse(HttpContext.User.Claims.First(x => x.Type == "id").Value)));
         }
 
         #endregion
@@ -67,7 +68,7 @@ namespace BlagodarniStoreAPI.Controllers
         /// <response code="200">Успешное выполнение</response>
         /// <response code="400">Ошибка API</response>
         [HttpPost("AssignCourier"), Authorize(Roles = "admin")]
-        public IActionResult AssignCourier([FromBody] Delivery delivery)
+        public IActionResult AssignCourier([FromBody] CreateDeliveryDTO delivery)
         {
             try 
             {

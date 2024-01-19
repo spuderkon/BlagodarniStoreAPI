@@ -88,10 +88,10 @@ public partial class MeatStoreContext : DbContext
             entity.HasOne(d => d.Order).WithMany(p => p.Deliveries)
                 .HasForeignKey(d => d.OrderId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Delivery_Order1");
+                .HasConstraintName("FK_Delivery_Order");
 
             entity.HasOne(d => d.User).WithMany(p => p.Deliveries)
-                .HasForeignKey(d => d.UserId)
+                .HasForeignKey(d => d.CourierId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Delivery_User");
         });
@@ -100,9 +100,12 @@ public partial class MeatStoreContext : DbContext
         {
             entity.ToTable("Order");
 
-            entity.Property(e => e.Address).HasMaxLength(50);
             entity.Property(e => e.OrderDate).HasColumnType("datetime");
             entity.Property(e => e.TotalPrice).HasColumnType("money");
+
+            entity.HasOne(d => d.Address).WithMany(p => p.Orders)
+                .HasForeignKey(d => d.AddressId)
+                .HasConstraintName("FK_Order_UserAddress");
 
             entity.HasOne(d => d.PaymentMethod).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.PaymentMethodId)
@@ -111,6 +114,7 @@ public partial class MeatStoreContext : DbContext
 
             entity.HasOne(d => d.Status).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.StatusId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Order_Status");
         });
 
@@ -120,7 +124,7 @@ public partial class MeatStoreContext : DbContext
 
             entity.ToTable("OrderStatus");
 
-            entity.Property(e => e.Name).HasMaxLength(30);
+            entity.Property(e => e.Name).HasMaxLength(80);
         });
 
         modelBuilder.Entity<PaymentMethod>(entity =>
@@ -173,7 +177,6 @@ public partial class MeatStoreContext : DbContext
         {
             entity.ToTable("User");
 
-            entity.Property(e => e.Address).HasMaxLength(50);
             entity.Property(e => e.Email).HasMaxLength(60);
             entity.Property(e => e.Lastname).HasMaxLength(30);
             entity.Property(e => e.Name).HasMaxLength(30);
@@ -181,6 +184,10 @@ public partial class MeatStoreContext : DbContext
             entity.Property(e => e.PasswordSalt).HasMaxLength(256);
             entity.Property(e => e.PhoneNumber).HasMaxLength(11);
             entity.Property(e => e.Surname).HasMaxLength(30);
+
+            entity.HasOne(d => d.Address).WithMany(p => p.Users)
+                .HasForeignKey(d => d.AddressId)
+                .HasConstraintName("FK_User_UserAddress");
 
             entity.HasOne(d => d.Role).WithMany(p => p.Users)
                 .HasForeignKey(d => d.RoleId)
@@ -199,7 +206,7 @@ public partial class MeatStoreContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.UserAddresses)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Addresses_User");
+                .HasConstraintName("FK_UserAddress_User");
         });
 
         OnModelCreatingPartial(modelBuilder);

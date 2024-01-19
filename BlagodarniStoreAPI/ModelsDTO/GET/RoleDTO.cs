@@ -1,11 +1,11 @@
 ﻿using BlagodarniStoreAPI.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace BlagodarniStoreAPI.ModelsDTO
+namespace BlagodarniStoreAPI.ModelsDTO.GET
 {
     public class RoleDTO : Role
     {
-        public RoleDTO(Role role) 
+        public RoleDTO(Role role)
         {
             Id = role.Id;
             Name = role.Name;

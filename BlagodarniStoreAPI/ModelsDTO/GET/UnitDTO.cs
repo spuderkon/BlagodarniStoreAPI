@@ -1,11 +1,11 @@
 ﻿using BlagodarniStoreAPI.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace BlagodarniStoreAPI.ModelsDTO
+namespace BlagodarniStoreAPI.ModelsDTO.GET
 {
     public class UnitDTO : Unit
     {
-        public UnitDTO(Unit unit) 
+        public UnitDTO(Unit unit)
         {
             Id = unit.Id;
             Measure = unit.Measure;
@@ -15,7 +15,7 @@ namespace BlagodarniStoreAPI.ModelsDTO
         [Key]
         new public int Id { get; set; }
         [StringLength(30)]
-        new public int Measure { get; set; } 
+        new public int Measure { get; set; }
         [StringLength(30)]
         new public string Name { get; set; } = null!;
     }

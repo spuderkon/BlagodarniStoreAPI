@@ -1,6 +1,6 @@
 ﻿using BlagodarniStoreAPI.Interfaces;
 using BlagodarniStoreAPI.Models;
-using BlagodarniStoreAPI.ModelsDTO;
+using BlagodarniStoreAPI.ModelsDTO.GET;
 using Microsoft.EntityFrameworkCore;
 using System;
 

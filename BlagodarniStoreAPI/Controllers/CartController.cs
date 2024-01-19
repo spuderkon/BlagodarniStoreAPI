@@ -1,5 +1,6 @@
 ﻿using BlagodarniStoreAPI.Interfaces;
 using BlagodarniStoreAPI.Models;
+using BlagodarniStoreAPI.ModelsDTO.POST;
 using BlagodarniStoreAPI.Repositories;
 using BlagodarniStoreAPI.Tools;
 using Microsoft.AspNetCore.Authorization;
@@ -30,7 +31,7 @@ namespace BlagodarniStoreAPI.Controllers
         [HttpGet("GetMy"), Authorize]
         public ActionResult<IEnumerable<Cart>> GetMy() 
         {
-            return Ok(_iCartRepository.GetMy(int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value)));
+            return Ok(_iCartRepository.GetMy(int.Parse(HttpContext.User.Claims.First(x => x.Type == "id").Value)));
         }
 
         #endregion
@@ -51,14 +52,10 @@ namespace BlagodarniStoreAPI.Controllers
         ///
         ///     [
         ///      {
-        ///       "id": int,
-        ///       "customerId": int,
         ///       "productId": int,
         ///       "amount": int
         ///      },
         ///      {
-        ///       "id": int,
-        ///       "customerId": int,
         ///       "productId": int,
         ///       "amount": int
         ///      },
@@ -73,11 +70,11 @@ namespace BlagodarniStoreAPI.Controllers
         /// <response code="200">Успешное выполнение</response>
         /// <response code="400">Ошибка API</response>
         [HttpPut("UpdateMy"), Authorize]
-        public IActionResult UpdateMy([FromBody] List<Cart> carts)
+        public IActionResult UpdateMy([FromBody] List<UpdateCartDTO> carts)
         { 
             try
             {
-                _iCartRepository.UpdateMy(carts, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
+                _iCartRepository.UpdateMy(carts, int.Parse(HttpContext.User.Claims.First(x => x.Type == "id").Value));
                 return Ok();
             }
             catch (Exception ex)

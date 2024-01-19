@@ -1,6 +1,6 @@
 ﻿using BlagodarniStoreAPI.Interfaces;
 using BlagodarniStoreAPI.Models;
-using BlagodarniStoreAPI.ModelsDTO;
+using BlagodarniStoreAPI.ModelsDTO.GET;
 
 namespace BlagodarniStoreAPI.Repositories
 {
@@ -16,7 +16,7 @@ namespace BlagodarniStoreAPI.Repositories
         #region GET
         public List<Role> GetAll() 
         {
-            return LoadData(_context.Roles).ToList();
+            return _context.Roles.ToList();
         }
 
         private IQueryable<Role> LoadData(IQueryable<Role> roles)

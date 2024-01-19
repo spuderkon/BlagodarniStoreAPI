@@ -1,12 +1,12 @@
 ﻿using BlagodarniStoreAPI.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace BlagodarniStoreAPI.ModelsDTO
+namespace BlagodarniStoreAPI.ModelsDTO.GET
 {
     public class OrderStatusDTO : OrderStatus
     {
-        public OrderStatusDTO(OrderStatus orderStatus) 
-        { 
+        public OrderStatusDTO(OrderStatus orderStatus)
+        {
             Id = orderStatus.Id;
             Name = orderStatus.Name;
         }

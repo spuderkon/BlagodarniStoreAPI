@@ -1,11 +1,11 @@
 ﻿using BlagodarniStoreAPI.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace BlagodarniStoreAPI.ModelsDTO
+namespace BlagodarniStoreAPI.ModelsDTO.GET
 {
     public class CategoryDTO : Category
     {
-        public CategoryDTO(Category category) 
+        public CategoryDTO(Category category)
         {
             Id = category.Id;
             Name = category.Name;

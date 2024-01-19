@@ -31,7 +31,7 @@ namespace BlagodarniStoreAPI.Controllers
         /// <returns></returns>
         /// <response code="200">Успешное выполнение</response>
         /// <response code="400">Ошибка API</response>
-        [HttpGet("GetAll")]
+        [HttpGet("GetAll"), Authorize]
         public ActionResult<IEnumerable<Product>> GetAll()
         {
             return Ok(_iProductRepository.GetAll());
@@ -44,7 +44,7 @@ namespace BlagodarniStoreAPI.Controllers
         /// <returns></returns>
         /// <response code="200">Успешное выполнение</response>
         /// <response code="400">Ошибка API</response>
-        [HttpGet("GetByParent/{Id}")]
+        [HttpGet("GetByParent/{Id}"), Authorize]
         public ActionResult<IEnumerable<Product>> GetByParentId(int id)
         {
             return _iProductRepository.GetByParentId(id)!;

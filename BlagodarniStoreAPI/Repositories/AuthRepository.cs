@@ -1,6 +1,7 @@
 ﻿using BlagodarniStoreAPI.Interfaces;
 using BlagodarniStoreAPI.Models;
 using BlagodarniStoreAPI.ModelsDTO;
+using BlagodarniStoreAPI.ModelsDTO.POST;
 using BlagodarniStoreAPI.Tools;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -11,8 +12,8 @@ namespace BlagodarniStoreAPI.Repositories
 {
     public class AuthRepository : IAuthRepository
     {
-        private readonly MeatStoreContext _context;
         Random _random;
+        private readonly MeatStoreContext _context;
         private readonly IUserRepository _iUserRepository;
         private readonly IUserAddressRepository _userAddressRepository;
         private readonly IConfiguration _iConfiguration;
@@ -32,11 +33,12 @@ namespace BlagodarniStoreAPI.Repositories
             if (user is not null)
             {
                 var identity = new ClaimsIdentity(new[] {
-                        new Claim("phoneNumber", user.PhoneNumber),
+                        new Claim("id",user.Id.ToString()),
                         new Claim(ClaimTypes.Role, user.Role.Name),
-                        new Claim("id",user.Id.ToString()) });
-
-                return JwtTools.GenerateJwtToken(identity, _iConfiguration["JwtSettings:Key"]!, _iConfiguration["JwtSettings:Issuer"]!, _iConfiguration["JwtSettings:Audience"]!);
+                        new Claim("phoneNumber", user.PhoneNumber),
+                });
+                
+            return JwtTools.GenerateJwtToken(identity, _iConfiguration["JwtSettings:Key"]!, _iConfiguration["JwtSettings:Issuer"]!, _iConfiguration["JwtSettings:Audience"]!);
             }
             return null;
 
@@ -59,7 +61,7 @@ namespace BlagodarniStoreAPI.Repositories
 
         #region POST
 
-        public string? Register(User user)
+        public string? Register(CreateUserDTO user)
         {
             if (PhoneNumberAlreadyExist(user.PhoneNumber))
             {
@@ -68,14 +70,20 @@ namespace BlagodarniStoreAPI.Repositories
 
             string salt = RegistrationTools.GetRandomKey(_random.Next(128, 256));
             string pass = RegistrationTools.GetPasswordSha256(user.Password, salt);
-            string oldPass = user.Password;
-            user.RoleId = 3;
-            user.Password = pass;
-            user.PasswordSalt = salt;
-            _context.Users.Add(user);
+            var newUser = new User
+            {
+                Name = user.Name,
+                Surname = user.Surname,
+                Lastname = user.Lastname,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                RoleId = 3,
+                Password = pass,
+                PasswordSalt = salt,
+            };
+            _context.Users.Add(newUser);
             _context.SaveChanges();
-            _userAddressRepository.Add(user.Id, user.Address);
-            return Authorize(user.PhoneNumber, oldPass);
+            return Authorize(user.PhoneNumber, user.Password);
         }
 
         #endregion

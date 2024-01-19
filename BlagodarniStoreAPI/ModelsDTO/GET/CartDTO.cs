@@ -1,7 +1,7 @@
 ﻿using BlagodarniStoreAPI.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace BlagodarniStoreAPI.ModelsDTO
+namespace BlagodarniStoreAPI.ModelsDTO.GET
 {
     public class CartDTO : Cart
     {
@@ -14,7 +14,6 @@ namespace BlagodarniStoreAPI.ModelsDTO
             OrderId = cart.OrderId;
         }
 
-        [Key]
         new public int Id { get; set; }
         new public int UserId { get; set; }
         new public int ProductId { get; set; }

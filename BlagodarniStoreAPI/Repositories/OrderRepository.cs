@@ -1,7 +1,9 @@
 ﻿using BlagodarniStoreAPI.Interfaces;
 using BlagodarniStoreAPI.Models;
-using BlagodarniStoreAPI.ModelsDTO;
+using BlagodarniStoreAPI.ModelsDTO.GET;
+using BlagodarniStoreAPI.ModelsDTO.POST;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace BlagodarniStoreAPI.Repositories
 {
@@ -9,16 +11,29 @@ namespace BlagodarniStoreAPI.Repositories
     {
         MeatStoreContext _context;
         ICartRepository _iCartRepository;
+        IUserRepository _iUserRepository;
         IUserAddressRepository _iUserAddressRepository;
 
-        public OrderRepository(MeatStoreContext context, ICartRepository iCartRepository, IUserAddressRepository iUserAddressRepository)
+        public OrderRepository(MeatStoreContext context, ICartRepository iCartRepository,IUserRepository iUserRepository, IUserAddressRepository iUserAddressRepository)
         {
             _context = context;
             _iCartRepository = iCartRepository;
+            _iUserRepository = iUserRepository;
             _iUserAddressRepository = iUserAddressRepository;
         }
 
         #region GET
+
+        public List<Order> GetMyActual(int userId)
+        {
+            return LoadData(_context.Orders.Where(x => x.UserId == userId && x.StatusId == 1)).ToList();
+        }
+
+        public List<Order> GetMyDelivered(int userId)
+        {
+            return LoadData(_context.Orders.Where(x => x.UserId == userId && x.StatusId == 2)).ToList();
+        }
+
         public List<Order> GetNotInDelivery()
         {
             return LoadData(_context.Orders.Where(x => x.StatusId == 1)).ToList();
@@ -29,8 +44,8 @@ namespace BlagodarniStoreAPI.Repositories
             return orders
                   .Select(x => new OrderDTO(x)
                   {
-                      PaymentMethod = new PaymentMethodDTO(x.PaymentMethod!),
-                      Status = new OrderStatusDTO(x.Status!),
+                      PaymentMethod = new PaymentMethodDTO(x.PaymentMethod),
+                      Status = new OrderStatusDTO(x.Status),
                   });
         }
 
@@ -38,37 +53,35 @@ namespace BlagodarniStoreAPI.Repositories
 
         #region ADD
 
-        public Order CreateMy(Order order, int userId)
+        public Order CreateMy(CreateOrderDTO order, int userId)
         {
             var carts = _context.Carts.Where(x => x.UserId == userId && x.OrderId == null);
-            if (carts.Count() != 0)
+            var qwe = carts.Count();
+            bool paid = order.PaymentMethodId == 1 ? true : false;
+            if (carts.ToList().Count() != 0)
             {
-                if(order.PaymentMethodId != 1 && order.Paid)
-                {
-                    throw new Exception($"Конфликт полей {order.PaymentMethodId} и {order.Paid}") ;
-                }
-                else
-                {
-                    Order newOrder = new Order
+                    var newOrder = new Order
                     {
                         UserId = userId,
                         OrderDate = DateTime.Now,
                         StatusId = 1,
                         TotalPrice = carts.Sum(x => x.Product!.Price * x.Amount),
                         PaymentMethodId = order.PaymentMethodId,
-                        Paid = order.Paid,
-                        Address = order.Address,
+                        Paid = paid,
+                        AddressId = order.AddressId,
                     };
+
                     _context.Orders.Add(newOrder);
                     _context.SaveChanges();
                     carts.ToList().ForEach(x => x.OrderId = newOrder.Id);
-                    _iCartRepository.UpdateMy(carts.ToList(), userId);
-                    if(UserAddressDoesntExist(newOrder.Address))
+                    List<UpdateCartDTO> updateCarts = carts.Select(x => new UpdateCartDTO()
                     {
-                        _iUserAddressRepository.Add(userId,order.Address);
-                    }
-                    return newOrder;
-                }
+                        ProductId = x.ProductId,
+                        Amount = x.Amount,
+                        OrderId = x.OrderId,
+                    }).ToList();
+                    _iCartRepository.UpdateMy(updateCarts, userId);
+                    return newOrder;            
             }
             else
             {
@@ -85,7 +98,7 @@ namespace BlagodarniStoreAPI.Repositories
             var delivery = _context.Deliveries.FirstOrDefault(x => x.OrderId == orderId);
             if (delivery is not null)
             {
-                if (delivery.UserId != courierId)
+                if (delivery.CourierId != courierId)
                 {
                     throw new Exception("Заказ вам не принадлежит");
                 }
@@ -115,7 +128,7 @@ namespace BlagodarniStoreAPI.Repositories
             var delivery = _context.Deliveries.FirstOrDefault(x => x.OrderId == orderId);
             if (delivery is not null)
             {
-                if (delivery.UserId != courierId)
+                if (delivery.CourierId != courierId)
                 {
                     throw new Exception("Заказ вам не принадлежит");
                 }
@@ -147,12 +160,7 @@ namespace BlagodarniStoreAPI.Repositories
 
         #region TOOLMETHODS
 
-        public bool UserAddressDoesntExist(string address)
-        {
-            if(_context.UserAddresses.FirstOrDefault(x => x.Address == address) == null)
-                return true;
-            return false;
-        }
+
 
         #endregion
 

@@ -54,6 +54,7 @@ builder.Services.AddTransient<IUnitRepository, UnitRepository>();
 builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
 builder.Services.AddTransient<IOrderRepository, OrderRepository>();
 builder.Services.AddTransient<IDeliveryRepository, DeliveryRepository>();
+builder.Services.AddTransient<IPaymentMethodRepository, PaymentMethodRepository>();
 
 
 var app = builder.Build();

@@ -36,5 +36,29 @@ namespace BlagodarniStoreAPI.Controllers
 
 
         #endregion
+
+        #region POST
+
+        /// <summary>
+        /// Добавить адрес (Токен обязателен)
+        /// </summary>
+        /// <param name="address">Адрес</param>
+        /// <returns></returns>
+        /// <response code="200">Успешное выполнение</response>
+        /// <response code="400">Ошибка API</response>
+        [HttpPost("AddMy/{address}"), Authorize]
+        public IActionResult AddMy(string address)
+        {
+            try
+            {
+                return Ok(_iUserAddressRepository.Add(int.Parse(HttpContext.User.Claims.First(x => x.Type == "id").Value), address));
+            }
+            catch (Exception ex) 
+            { 
+                return BadRequest(ex.Message);
+            }
+        }
+
+        #endregion
     }
 }

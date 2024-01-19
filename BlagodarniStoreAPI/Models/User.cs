@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Serialization;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -7,7 +8,7 @@ namespace BlagodarniStoreAPI.Models;
 public partial class User
 {
     public int Id { get; set; }
-    [StringLength(30)]
+
     public string Name { get; set; } = null!;
 
     public string Surname { get; set; } = null!;
@@ -22,15 +23,17 @@ public partial class User
 
     public string Password { get; set; } = null!;
 
-    public string? PasswordSalt { get; set; }
+    public string PasswordSalt { get; set; } = null!;
 
-    public string Address { get; set; } = null!;
+    public int? AddressId { get; set; }
+
+    public virtual UserAddress? Address { get; set; }
 
     public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
 
     public virtual ICollection<Delivery> Deliveries { get; set; } = new List<Delivery>();
 
-    public virtual Role? Role { get; set; }
+    public virtual Role Role { get; set; } = null!;
 
     public virtual ICollection<UserAddress> UserAddresses { get; set; } = new List<UserAddress>();
 }

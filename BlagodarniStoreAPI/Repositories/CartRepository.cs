@@ -1,7 +1,8 @@
 ﻿using Azure.Core;
 using BlagodarniStoreAPI.Interfaces;
 using BlagodarniStoreAPI.Models;
-using BlagodarniStoreAPI.ModelsDTO;
+using BlagodarniStoreAPI.ModelsDTO.GET;
+using BlagodarniStoreAPI.ModelsDTO.POST;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlagodarniStoreAPI.Repositories
@@ -28,7 +29,7 @@ namespace BlagodarniStoreAPI.Repositories
             return carts.Include(x => x.Product)
                   .Select(x => new CartDTO(x)
                   {
-                      Product = new ProductDTO(x.Product!),
+                      Product = new ProductDTO(x.Product!)
                   });
         }
 
@@ -42,43 +43,35 @@ namespace BlagodarniStoreAPI.Repositories
 
         #region UPDATE
 
-        public void UpdateMy(List<Cart> newCarts,int userId)
+        public void UpdateMy(List<UpdateCartDTO> carts,int userId)
         {
-            if (CartsBelongUser(userId, newCarts))
-            {
-                var dataBaseCarts = _context.Carts.Where(x => x.UserId == userId && x.OrderId == null).ToList();
-                newCarts = newCarts.GroupBy(x => x.ProductId).Select(group =>
-                    new Cart
-                    {
-                        UserId = group.First().UserId,
-                        ProductId = group.Key,
-                        Amount = group.Sum(cart => cart.Amount)
-                    })
-                    .ToList();
-                var cartsToDelete = dataBaseCarts.ExceptBy(newCarts.Select(x => x.ProductId), x=> x.ProductId).ToList();
-                foreach (var cart in newCarts) 
+            var dataBaseCarts = _context.Carts.Where(x => x.UserId == userId && x.OrderId == null).ToList();
+            var newCarts = carts.GroupBy(x => x.ProductId).Select(group =>
+                new Cart
                 {
-                    var existingCart = _context.Carts.FirstOrDefault(x => x.UserId == userId && x.ProductId == cart.ProductId && x.OrderId == null);
-
-                    if(existingCart == null)
-                    {
-                        _context.Carts.Add(cart);
-                    }
-                    else
-                    {
-                        existingCart.Amount = cart.Amount;
-                        _context.Carts.Update(existingCart);
-                    }
-                }
-                _context.Carts.RemoveRange(cartsToDelete);
-                _context.SaveChanges();
-            }
-            else
+                    UserId = userId,
+                    ProductId = group.Key,
+                    Amount = group.Sum(cart => cart.Amount)
+                })
+                .ToList();
+            var cartsToDelete = dataBaseCarts.ExceptBy(carts.Select(x => x.ProductId), x => x.ProductId).ToList();
+            foreach (var cart in newCarts)
             {
-                throw new Exception($"Конфликт полей UserId и Cart.User.Id");
-            }
-        }
+                var existingCart = _context.Carts.FirstOrDefault(x => x.UserId == userId && x.ProductId == cart.ProductId && x.OrderId == null);
 
+                if (existingCart == null)
+                {
+                    _context.Carts.Add(cart);
+                }
+                else
+                {
+                    existingCart.Amount = cart.Amount;
+                    _context.Carts.Update(existingCart);
+                }
+            }
+            _context.Carts.RemoveRange(cartsToDelete);
+            _context.SaveChanges();
+        }
         #endregion
 
         #region DELETE
@@ -89,15 +82,7 @@ namespace BlagodarniStoreAPI.Repositories
 
         #region TOOLMETHODS
 
-        private bool CartsBelongUser(int userId, List<Cart> carts)
-        {
-            foreach(var cart in carts)
-            {
-                if(cart.UserId != userId)
-                    return false;
-            }
-            return true;
-        }
+
 
         #endregion
     }

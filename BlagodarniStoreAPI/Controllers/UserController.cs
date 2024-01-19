@@ -30,7 +30,7 @@ namespace BlagodarniStoreAPI.Controllers
         /// <response code="200">Успешное выполнение</response>
         /// <response code="400">Ошибка API</response>
         [HttpGet("Get/{id}"), Authorize]
-        public async Task<ActionResult<User>> Get(int id)
+        public ActionResult<User> Get(int id)
         {
             return Ok(_iUserRepository.Get(id));
         }
@@ -44,7 +44,7 @@ namespace BlagodarniStoreAPI.Controllers
         [HttpGet("GetMy"), Authorize]
         public ActionResult<User> GetMy() 
         { 
-            return _iUserRepository.GetMy(int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
+            return _iUserRepository.GetMy(int.Parse(HttpContext.User.Claims.First(x => x.Type == "id").Value));
         }
 
         /// <summary>

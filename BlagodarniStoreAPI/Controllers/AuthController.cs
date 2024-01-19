@@ -5,9 +5,10 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using BlagodarniStoreAPI.Models;
 using BlagodarniStoreAPI.Tools;
-using BlagodarniStoreAPI.ModelsDTO;
 using BCrypt.Net;
 using Microsoft.EntityFrameworkCore;
+using BlagodarniStoreAPI.ModelsDTO.GET;
+using BlagodarniStoreAPI.ModelsDTO.POST;
 
 namespace BlagodarniStoreAPI.Controllers
 {
@@ -16,12 +17,10 @@ namespace BlagodarniStoreAPI.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthRepository _iAuthRepository;
-        private readonly IConfiguration _iConfiguration;
 
-        public AuthController(IAuthRepository iAuthRepository, IConfiguration iConfiguration)
+        public AuthController(IAuthRepository iAuthRepository)
         {
             _iAuthRepository = iAuthRepository;
-            _iConfiguration = iConfiguration;
         }
 
         #region GET
@@ -78,8 +77,7 @@ namespace BlagodarniStoreAPI.Controllers
         ///        "Lastname": string,
         ///        "Email": string,
         ///        "PhoneNumber": string(MAX_LENGTH(11)),
-        ///        "Password": string,
-        ///        "Address": string
+        ///        "Password": string
         ///     }
         ///
         /// </remarks>
@@ -88,7 +86,7 @@ namespace BlagodarniStoreAPI.Controllers
         /// <response code="200">Успешное выполнение</response>
         /// <response code="400">Ошибка API</response>
         [HttpPost("Register")]
-        public IActionResult Register([FromBody] User user)
+        public IActionResult Register([FromBody] CreateUserDTO user)
         {
             try
             {
@@ -97,7 +95,7 @@ namespace BlagodarniStoreAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ErrorTools.GetInfo(ex));
+                return BadRequest(ex.Message);
             }
         }
 
@@ -115,7 +113,7 @@ namespace BlagodarniStoreAPI.Controllers
             if (_iAuthRepository.SetNewPassword(
                 phoneNumber, 
                 newPassword,
-                int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value))) 
+                int.Parse(HttpContext.User.Claims.First(x => x.Type == "id").Value))) 
                 return Ok();
             else return BadRequest();
         }

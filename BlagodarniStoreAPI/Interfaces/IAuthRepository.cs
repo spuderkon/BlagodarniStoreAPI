@@ -1,5 +1,5 @@
 ﻿using BlagodarniStoreAPI.Models;
-using BlagodarniStoreAPI.ModelsDTO;
+using BlagodarniStoreAPI.ModelsDTO.POST;
 
 namespace BlagodarniStoreAPI.Interfaces
 {
@@ -7,7 +7,7 @@ namespace BlagodarniStoreAPI.Interfaces
     {
         string? Authorize(string phoneNumber, string password);
         User? ValidUser(string phoneNumber, string password);
-        string? Register(User user);
+        string? Register(CreateUserDTO user);
         bool SetNewPassword(string phoneNumber, string password, int userId);
     }
 }

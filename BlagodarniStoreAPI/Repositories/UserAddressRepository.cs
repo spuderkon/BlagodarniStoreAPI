@@ -1,6 +1,6 @@
 ﻿using BlagodarniStoreAPI.Interfaces;
 using BlagodarniStoreAPI.Models;
-using BlagodarniStoreAPI.ModelsDTO;
+using BlagodarniStoreAPI.ModelsDTO.GET;
 
 namespace BlagodarniStoreAPI.Repositories
 {
@@ -29,23 +29,27 @@ namespace BlagodarniStoreAPI.Repositories
         }
         #endregion
 
-        #region POST
+        #region ADD
 
-        public UserAddress Add(int userId, string address)
+        public UserAddress Add(int id, string address)
         {
-            var newAddress = new UserAddress
-            {
-                UserId = userId,
-                Address = address
-            };
-            _context.UserAddresses.Add(newAddress);
-            _context.SaveChanges();
-            return newAddress;
+            if (UserAddressDoesntExist(id, address))
+            { 
+                var newAddress = new UserAddress
+                {
+                    UserId = id,
+                    Address = address
+                };
+                _context.UserAddresses.Add(newAddress);
+                _context.SaveChanges();
+                return newAddress;
+            }
+            throw new Exception("Такой адрес уже существует");
         }
 
         #endregion
 
-        #region PUT
+        #region UPDATE
 
 
 
@@ -54,6 +58,17 @@ namespace BlagodarniStoreAPI.Repositories
         #region DELETE
 
 
+
+        #endregion
+
+        #region TOOLMETHODS
+
+        public bool UserAddressDoesntExist(int id, string address)
+        {
+            if (_context.UserAddresses.FirstOrDefault(x => x.UserId == id && x.Address == address) == null)
+                return true;
+            return false;
+        }
 
         #endregion
     }

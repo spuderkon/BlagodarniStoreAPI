@@ -1,6 +1,7 @@
 ﻿using BlagodarniStoreAPI.Interfaces;
 using BlagodarniStoreAPI.Models;
-using BlagodarniStoreAPI.ModelsDTO;
+using BlagodarniStoreAPI.ModelsDTO.GET;
+using BlagodarniStoreAPI.ModelsDTO.POST;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 
@@ -19,12 +20,12 @@ namespace BlagodarniStoreAPI.Repositories
 
         public Delivery? Get(int id, int userId) 
         {
-            return LoadData(_context.Deliveries.Where(x => x.Id == id && x.UserId == userId).Include(x => x.Order.Carts)).FirstOrDefault();
+            return LoadData(_context.Deliveries.Where(x => x.Id == id && x.CourierId == userId).Include(x => x.Order.Carts)).FirstOrDefault();
         }
 
         public List<Delivery> GetMyAllActive(int userId)
         {
-            return LoadData(_context.Deliveries.Where(x => x.UserId == userId && x.Order.StatusId != 2)).ToList();
+            return LoadData(_context.Deliveries.Where(x => x.CourierId == userId && x.Order.StatusId != 2)).ToList();
         }
 
         private IQueryable<Delivery> LoadData(IQueryable<Delivery> deliveries)
@@ -39,13 +40,19 @@ namespace BlagodarniStoreAPI.Repositories
 
         #region ADD
 
-        public Delivery AssignCourier(Delivery newDelivery)
+        public Delivery AssignCourier(CreateDeliveryDTO delivery)
         {
-            var delivery = _context.Deliveries.FirstOrDefault(x => x.OrderId == newDelivery.OrderId);
-            if (delivery is not null)
+            var existingDelivery = _context.Deliveries.FirstOrDefault(x => x.OrderId == delivery.OrderId);
+            if (existingDelivery is not null)
             {
                 throw new Exception("Доставка уже сформирована");
             }
+            var newDelivery = new Delivery
+            {
+                OrderId = delivery.OrderId,
+                CourierId = delivery.CourierId,
+                DateArrive = delivery.DateArrive,
+            };
             _context.Deliveries.Add(newDelivery);
             _context.SaveChanges();
             return newDelivery;
