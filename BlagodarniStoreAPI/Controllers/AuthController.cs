@@ -57,12 +57,14 @@ namespace BlagodarniStoreAPI.Controllers
         [HttpPost("Authorize")]
         public IActionResult Authorize(string phoneNumber, string password)
         {
-            var token = _iAuthRepository.Authorize(phoneNumber, password);
-            if (token is not null)
+            try
             {
-                return Ok(token);
+                return Ok(_iAuthRepository.Authorize(phoneNumber, password));
             }
-            return Unauthorized();
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         /// <summary>

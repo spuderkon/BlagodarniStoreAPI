@@ -28,7 +28,7 @@ namespace BlagodarniStoreAPI.Controllers
         /// <returns></returns>
         /// <response code="200">Успешное выполнение</response>
         /// <response code="400">Ошибка API</response>
-        [HttpGet("Get/{id}"), Authorize(Roles = "courier")]
+        [HttpGet("Get/{id}"), Authorize(Roles = "admin,courier")]
         public ActionResult Get(int id)
         {
             return Ok(_iDeliveryRepository.Get(id, int.Parse(HttpContext.User.Claims.First(x => x.Type == "id").Value)));
@@ -40,10 +40,10 @@ namespace BlagodarniStoreAPI.Controllers
         /// <returns></returns>
         /// <response code="200">Успешное выполнение</response>
         /// <response code="400">Ошибка API</response>
-        [HttpGet("GetMyAllActive"), Authorize(Roles = "courier")]
-        public ActionResult<IEnumerable<Delivery>> GetMyAllActive()
+        [HttpGet("GetMyActive"), Authorize(Roles = "courier")]
+        public ActionResult<IEnumerable<Delivery>> GetMyActive()
         {
-            return Ok(_iDeliveryRepository.GetMyAllActive(int.Parse(HttpContext.User.Claims.First(x => x.Type == "id").Value)));
+            return Ok(_iDeliveryRepository.GetMyActive(int.Parse(HttpContext.User.Claims.First(x => x.Type == "id").Value)));
         }
 
         #endregion

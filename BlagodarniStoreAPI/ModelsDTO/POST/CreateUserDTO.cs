@@ -21,7 +21,8 @@ namespace BlagodarniStoreAPI.ModelsDTO.POST
         public string PhoneNumber { get; set; } = null!;
 
         [RegularExpression(@"^[1-3]$", ErrorMessage = "Wrong number")]
-        public int? RoleId { get; set; }
+        public int RoleId { get; set; }
         public string Password { get; set; } = null!;
+        public int AddressId { get; set; }
     }
 }

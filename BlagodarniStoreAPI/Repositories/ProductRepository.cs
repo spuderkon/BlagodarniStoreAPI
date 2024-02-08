@@ -1,6 +1,7 @@
 ﻿using BlagodarniStoreAPI.Interfaces;
 using BlagodarniStoreAPI.Models;
 using BlagodarniStoreAPI.ModelsDTO.GET;
+using BlagodarniStoreAPI.ModelsDTO.POST;
 using Microsoft.EntityFrameworkCore;
 using System;
 
@@ -40,11 +41,20 @@ namespace BlagodarniStoreAPI.Repositories
 
         #region ADD
 
-        public Product Add(Product product)
+        public Product Add(CreateProductDTO product)
         {
-            _context.Products.Add(product);
+            var newProduct = new Product
+            {
+                Name = product.Name,
+                CategoryId = product.CategoryId,
+                Description = product.Description,
+                Image = product.Image,
+                UnitId = product.UnitId,
+                Price = product.Price,
+            };
+            _context.Products.Add(newProduct);
             _context.SaveChanges();
-            return product;
+            return newProduct;
         }
 
         #endregion

@@ -14,7 +14,7 @@ namespace BlagodarniStoreAPI.ModelsDTO.GET
             Address = userAddress.Address;
         }
 
-        new public int Id { get; set; }
+        new public int? Id { get; set; }
         new public int UserId { get; set; }
         new public string Address { get; set; }
     }

@@ -1,5 +1,6 @@
 ﻿using BlagodarniStoreAPI.Interfaces;
 using BlagodarniStoreAPI.Models;
+using BlagodarniStoreAPI.ModelsDTO.POST;
 using BlagodarniStoreAPI.Repositories;
 using BlagodarniStoreAPI.Tools;
 using Microsoft.AspNetCore.Authorization;
@@ -77,7 +78,6 @@ namespace BlagodarniStoreAPI.Controllers
         ///        "PhoneNumber": string(MAX_LENGTH(11)),
         ///        "RoleId": int,
         ///        "Password": string,
-        ///        "Address": string
         ///     }
         ///
         /// </remarks>
@@ -86,7 +86,7 @@ namespace BlagodarniStoreAPI.Controllers
         /// <response code="200">Успешное выполнение</response>
         /// <response code="400">Ошибка API</response>
         [HttpPost("Add"), Authorize(Roles = "admin")]
-        public IActionResult Add([FromBody] User user) 
+        public IActionResult Add([FromBody] CreateUserDTO user) 
         {
             try
             {

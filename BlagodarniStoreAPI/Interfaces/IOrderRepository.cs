@@ -12,5 +12,6 @@ namespace BlagodarniStoreAPI.Interfaces
         List<Order> GetMyDelivered(int userId);
         void OrderPaid(int deliveryId, int courierId);
         void OrderDelivered(int deliveryId, int courierId);
+        void RejectOrder(int orderId);
     }
 }

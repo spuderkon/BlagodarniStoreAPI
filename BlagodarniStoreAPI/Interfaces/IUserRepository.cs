@@ -1,4 +1,5 @@
 ﻿using BlagodarniStoreAPI.Models;
+using BlagodarniStoreAPI.ModelsDTO.POST;
 
 namespace BlagodarniStoreAPI.Interfaces
 {
@@ -7,7 +8,7 @@ namespace BlagodarniStoreAPI.Interfaces
         User? Get(int userId);
         User GetMy(int userId);
         List<User> GetCouriers();
-        User Add(User user);
+        User Add(CreateUserDTO user);
         bool UserValid(User user);
         void UpdateUserAddress(int userId, int addressId);
     }

@@ -46,6 +46,7 @@ namespace BlagodarniStoreAPI.Repositories
                   {
                       PaymentMethod = new PaymentMethodDTO(x.PaymentMethod),
                       Status = new OrderStatusDTO(x.Status),
+                      Address = x.Address == null ? null : new UserAddressDTO(x.Address)
                   });
         }
 
@@ -147,6 +148,16 @@ namespace BlagodarniStoreAPI.Repositories
             else
             {
                 throw new Exception("Доставки с таким заказом не существует");
+            }
+        }
+
+        public void RejectOrder(int orderId)
+        {
+            var order = _context.Orders.FirstOrDefault(x => x.Id == orderId);
+            if(order is not null)
+            {
+                order.StatusId = 3;
+                _context.Orders.Update(order);
             }
         }
 

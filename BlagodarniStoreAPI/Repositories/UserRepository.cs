@@ -1,6 +1,7 @@
 ﻿using BlagodarniStoreAPI.Interfaces;
 using BlagodarniStoreAPI.Models;
 using BlagodarniStoreAPI.ModelsDTO.GET;
+using BlagodarniStoreAPI.ModelsDTO.POST;
 using BlagodarniStoreAPI.Tools;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -37,18 +38,19 @@ namespace BlagodarniStoreAPI.Repositories
 
         private IQueryable<User> LoadData(IQueryable<User> users)
         {
+
             return users
                   .Select(x => new UserDTO(x)
                   {
-                      Role = new RoleDTO(x.Role!),
-                      Address = new UserAddressDTO(x.Address),
+                      Role = new RoleDTO(x.Role),
+                      Address = x.Address == null ? null : new UserAddressDTO(x.Address)
                   });
         }
         #endregion
 
         #region ADD
 
-        public User Add(User user)
+        public User Add(CreateUserDTO user)
         {
             if (PhoneNumberAlreadyExist(user.PhoneNumber))
             {
@@ -56,7 +58,7 @@ namespace BlagodarniStoreAPI.Repositories
             }
             string salt = RegistrationTools.GetRandomKey(_random.Next(128, 256));
             string pass = RegistrationTools.GetPasswordSha256(user.Password, salt);
-            var creatingUser = new User
+            var newUser = new User
             {
                 Name = user.Name,
                 Surname = user.Surname,
@@ -66,12 +68,10 @@ namespace BlagodarniStoreAPI.Repositories
                 RoleId = user.RoleId,
                 Password = pass,
                 PasswordSalt = salt,
-                Address = user.Address,
             };
-            _context.Users.Add(creatingUser);
+            _context.Users.Add(newUser);
             _context.SaveChanges();
-            var newUser = _context.Users.Include(x => x.Role).Where(x => x.Id == creatingUser.Id).FirstOrDefault();
-            return newUser;
+            return LoadData(_context.Users.Where(x => x.Id == newUser.Id)).FirstOrDefault();
         }
 
         #endregion

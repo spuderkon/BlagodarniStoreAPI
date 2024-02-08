@@ -2,6 +2,7 @@
 using BlagodarniStoreAPI.Interfaces;
 using BlagodarniStoreAPI.Models;
 using BlagodarniStoreAPI.ModelsDTO;
+using BlagodarniStoreAPI.ModelsDTO.POST;
 using BlagodarniStoreAPI.Repositories;
 using BlagodarniStoreAPI.Tools;
 using Microsoft.AspNetCore.Authorization;
@@ -26,7 +27,7 @@ namespace BlagodarniStoreAPI.Controllers
         #region GET
 
         /// <summary>
-        /// Получить все продукты
+        /// Получить все продукты (Токен обязателен)
         /// </summary>
         /// <returns></returns>
         /// <response code="200">Успешное выполнение</response>
@@ -38,7 +39,7 @@ namespace BlagodarniStoreAPI.Controllers
         }
 
         /// <summary>
-        /// Получить продукты по категории родителя
+        /// Получить продукты по категории родителя (Токен обязателен)
         /// </summary>
         /// <param name="id">Id категории</param>
         /// <returns></returns>
@@ -66,7 +67,7 @@ namespace BlagodarniStoreAPI.Controllers
         ///        "Description": string,
         ///        "Image": string,
         ///        "UnitId": int,
-        ///        "Price": int
+        ///        "Price": decimal,double
         ///     }
         ///
         /// </remarks>
@@ -75,12 +76,11 @@ namespace BlagodarniStoreAPI.Controllers
         /// <response code="200">Успешное выполнение</response>
         /// <response code="400">Ошибка API</response>
         [HttpPost("Add"), Authorize(Roles = "admin")]
-        public IActionResult Add([FromBody] Product product)
+        public IActionResult Add([FromBody] CreateProductDTO product)
         {
             try
             {
-                Product newProduct = _iProductRepository.Add(product);
-                return Ok(newProduct);
+                return Ok(_iProductRepository.Add(product));
             }
             catch (Exception ex) 
             {

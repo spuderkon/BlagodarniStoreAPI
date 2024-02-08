@@ -1,6 +1,7 @@
 ﻿using BlagodarniStoreAPI.Interfaces;
 using BlagodarniStoreAPI.Models;
 using BlagodarniStoreAPI.ModelsDTO.GET;
+using BlagodarniStoreAPI.ModelsDTO.POST;
 
 namespace BlagodarniStoreAPI.Repositories
 {
@@ -32,7 +33,17 @@ namespace BlagodarniStoreAPI.Repositories
 
         #region ADD
 
-
+        public Unit Add(CreateUnitDTO unit)
+        {
+            var newUnit = new Unit
+            {
+                Measure = unit.Measure,
+                Name = unit.Name,
+            };
+            _context.Units.Add(newUnit);
+            _context.SaveChanges();
+            return newUnit;
+        }
 
         #endregion
 

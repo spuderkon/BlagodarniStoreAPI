@@ -38,7 +38,7 @@ namespace BlagodarniStoreAPI.Repositories
                         new Claim("phoneNumber", user.PhoneNumber),
                 });
                 
-            return JwtTools.GenerateJwtToken(identity, _iConfiguration["JwtSettings:Key"]!, _iConfiguration["JwtSettings:Issuer"]!, _iConfiguration["JwtSettings:Audience"]!);
+                return JwtTools.GenerateJwtToken(identity, _iConfiguration["JwtSettings:Key"]!, _iConfiguration["JwtSettings:Issuer"]!, _iConfiguration["JwtSettings:Audience"]!);
             }
             return null;
 

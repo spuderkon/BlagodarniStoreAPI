@@ -5,7 +5,7 @@ namespace BlagodarniStoreAPI.Interfaces
 {
     public interface IDeliveryRepository
     {
-        List<Delivery> GetMyAllActive(int userId);
+        List<Delivery> GetMyActive(int userId);
         Delivery? Get(int id, int userId);
         Delivery AssignCourier(CreateDeliveryDTO delivery);
     }

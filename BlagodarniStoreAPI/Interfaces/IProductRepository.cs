@@ -1,4 +1,5 @@
 ﻿using BlagodarniStoreAPI.Models;
+using BlagodarniStoreAPI.ModelsDTO.POST;
 
 namespace BlagodarniStoreAPI.Interfaces
 {
@@ -6,6 +7,6 @@ namespace BlagodarniStoreAPI.Interfaces
     {
         List<Product> GetAll();
         List<Product>? GetByParentId(int id);
-        Product Add(Product product);
+        Product Add(CreateProductDTO product);
     }
 }

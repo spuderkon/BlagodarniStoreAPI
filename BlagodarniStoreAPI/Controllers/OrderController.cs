@@ -30,7 +30,7 @@ namespace BlagodarniStoreAPI.Controllers
         /// <returns></returns>
         /// <response code="200">Успешное выполнение</response>
         /// <response code="400">Ошибка API</response>
-        [HttpGet("GetMyAllActual"), Authorize]
+        [HttpGet("GetMyActual"), Authorize]
         public ActionResult<IEnumerable<Order>> GetMyActual()
         {
             return Ok(_iOrderRepository.GetMyActual(int.Parse(HttpContext.User.Claims.First(x => x.Type == "id").Value)));
@@ -42,7 +42,7 @@ namespace BlagodarniStoreAPI.Controllers
         /// <returns></returns>
         /// <response code="200">Успешное выполнение</response>
         /// <response code="400">Ошибка API</response>
-        [HttpGet("GetMyAllDelivered"), Authorize]
+        [HttpGet("GetMyDelivered"), Authorize]
         public ActionResult<IEnumerable<Order>> GetMyDelivered()
         {
             return Ok(_iOrderRepository.GetMyDelivered(int.Parse(HttpContext.User.Claims.First(x => x.Type == "id").Value)));
@@ -105,7 +105,7 @@ namespace BlagodarniStoreAPI.Controllers
         /// <param name="id">Id заказа</param>
         /// <response code="200">Успешное выполнение</response>
         /// <response code="400">Ошибка API</response>
-        [HttpPut("OrderPaid"), Authorize(Roles = "courier")]
+        [HttpPut("OrderPaid/{id}"), Authorize(Roles = "courier")]
         public IActionResult OrderPaid(int id)
         {
             try
@@ -130,12 +130,26 @@ namespace BlagodarniStoreAPI.Controllers
         /// <param name="id">Id заказа</param>
         /// <response code="200">Успешное выполнение</response>
         /// <response code="400">Ошибка API</response>
-        [HttpPut("OrderDelivered"), Authorize(Roles = "courier")]
+        [HttpPut("OrderDelivered/{id}"), Authorize(Roles = "courier")]
         public IActionResult OrderDelivered(int id)
         {
             try
             {
                 _iOrderRepository.OrderDelivered(id, int.Parse(HttpContext.User.Claims.First(x => x.Type == "Id").Value));
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ErrorTools.GetInfo(ex));
+            }
+        }
+
+        [HttpPut("RejectOrder/{id}"), Authorize(Roles = "admin")]
+        public IActionResult RejectOrder(int id)
+        {
+            try
+            {
+                _iOrderRepository.RejectOrder(id);
                 return Ok();
             }
             catch (Exception ex)

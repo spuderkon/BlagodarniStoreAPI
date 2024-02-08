@@ -20,19 +20,25 @@ namespace BlagodarniStoreAPI.Repositories
 
         public Delivery? Get(int id, int userId) 
         {
-            return LoadData(_context.Deliveries.Where(x => x.Id == id && x.CourierId == userId).Include(x => x.Order.Carts)).FirstOrDefault();
+            return LoadLongData(_context.Deliveries.Where(x => x.Id == id && x.CourierId == userId)).FirstOrDefault();
         }
 
-        public List<Delivery> GetMyAllActive(int userId)
+        public List<Delivery> GetMyActive(int userId)
         {
-            return LoadData(_context.Deliveries.Where(x => x.CourierId == userId && x.Order.StatusId != 2)).ToList();
+            return LoadLongData(_context.Deliveries.Where(x => x.CourierId == userId && x.Order.StatusId != 2)).ToList();
         }
 
-        private IQueryable<Delivery> LoadData(IQueryable<Delivery> deliveries)
+        private IQueryable<Delivery> LoadLongData(IQueryable<Delivery> deliveries)
         {
             return deliveries
                   .Select(x => new DeliveryDTO(x)
                   {
+                     Order = new OrderDTO(x.Order) 
+                     { 
+                         Address = new UserAddressDTO(x.Order.Address)
+                     },
+                     User = new UserDTO(x.User),
+                     
                   });
         }
 
